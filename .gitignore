@@ -1,0 +1,7 @@
+# quy định không đẩy file ra bên ngoài ví dụ lên git hoặc server
+
+/node_modules
+/vendor
+/.idea
+.idea/
+.env
