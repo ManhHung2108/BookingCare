@@ -27,10 +27,24 @@ const getCRUD = (req, res) => {
 
 //Tạo mới 1 user
 let postCrud = async (req, res) => {
-    // console.log(req.body); //lấy ra tham số từ clien gửi lên
+    //lấy ra tham số từ clien gửi lên, muốn nhận được thì ở html bắt buộc phải có biến input là name, form có action và method
+    // console.log(req.body);
     let message = await CRUDService.createNewUser(req.body);
     console.log(message);
     return res.send("post crud from server");
+};
+
+const displayCRUD = async (req, res) => {
+    let listUser = await CRUDService.getAllUser();
+    console.log("listUser:", listUser);
+
+    if (listUser) {
+        return res.render("displayCRUD.ejs", {
+            data: listUser,
+        });
+    } else {
+        res.send("Not Found");
+    }
 };
 
 module.exports = {
@@ -38,4 +52,5 @@ module.exports = {
     getAboutPage,
     getCRUD,
     postCrud,
+    displayCRUD,
 };

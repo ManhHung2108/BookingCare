@@ -30,6 +30,19 @@ let createNewUser = async (data) => {
     });
 };
 
+let getAllUser = async () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = db.User.findAll({
+                raw: true, //config ra log chỉ chứa data trong db
+            });
+            resolve(users);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 let hashUserPassWord = (passWord) => {
     //Dùng promise để đảm bảo hàm luôn trả cho chúng ta tránh việc bất đồng bộ của js
     return new Promise(async (resolve, reject) => {
@@ -44,4 +57,5 @@ let hashUserPassWord = (passWord) => {
 
 module.exports = {
     createNewUser: createNewUser,
+    getAllUser: getAllUser,
 };

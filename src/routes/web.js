@@ -4,6 +4,7 @@ import {
     getAboutPage,
     getCRUD,
     postCrud,
+    displayCRUD,
 } from "../controllers/homeController";
 
 let router = express.Router();
@@ -14,8 +15,8 @@ let initWebRoutes = (app) => {
     router.get("/about", getAboutPage);
     router.get("/crud", getCRUD);
 
-    //chú ý gọi phương thức đúng ở đây là post
-    router.post("/post-crud", postCrud);
+    router.post("/post-crud", postCrud); //chú ý gọi phương thức đúng ở đây là post
+    router.get("/get-crud", displayCRUD);
 
     // router.get("/students", (req, res) => {
     //     return res.send("Trang students");
