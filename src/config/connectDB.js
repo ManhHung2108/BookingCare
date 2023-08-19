@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("hoidanit", "root", null, {
+const sequelize = new Sequelize("bookingcare", "root", "123456", {
     host: "localhost",
     dialect:
         "mysql" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
@@ -11,9 +11,9 @@ const sequelize = new Sequelize("hoidanit", "root", null, {
 let connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log("Connection has been established successfully.");
+        console.log("Kết nối thành công đến cơ sở dữ liệu.");
     } catch (error) {
-        console.error("Unable to connect to the database:", error);
+        console.error("Không thể kết nối đến cơ sở dữ liệu:", error);
     }
 };
 

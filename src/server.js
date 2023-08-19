@@ -24,5 +24,7 @@ connectDB();
 let port = process.env.PORT || 6969; //lấy ra trong file .env nếu PORT === undefined thì chạy cổng 6969
 
 app.listen(port, () => {
-    console.log(`Example app listening on port http://localhost:${port}`);
+    console.log(
+        `Ứng dụng đã được chạy trên port ${port}, http://localhost:${port}`
+    );
 });
