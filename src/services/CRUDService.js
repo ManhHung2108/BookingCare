@@ -43,6 +43,42 @@ let getAllUser = async () => {
     });
 };
 
+let getUserInfoById = async (userId) => {
+    try {
+        let userInfo = await db.User.findOne({
+            where: { id: userId },
+            raw: true,
+        });
+        return userInfo;
+    } catch (error) {
+        return false;
+    }
+};
+
+let updateUserData = async (data) => {
+    // console.log("data from service: ", data);
+    let userUpdate = getUserInfoById(data.id); //tìm ra user
+    if (userUpdate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await db.User.update(data, {
+                    where: {
+                        id: data.id,
+                    },
+                });
+                //Trả về danh sách sau khi cập nhập để controller hiển thị lên
+                let allUser = await db.User.findAll();
+                resolve(allUser); //phải trả về resolve hoặc reject để thoát khỏi promise
+            } catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
+    } else {
+        return false;
+    }
+};
+
 let hashUserPassWord = (passWord) => {
     //Dùng promise để đảm bảo hàm luôn trả cho chúng ta tránh việc bất đồng bộ của js
     return new Promise(async (resolve, reject) => {
@@ -58,4 +94,6 @@ let hashUserPassWord = (passWord) => {
 module.exports = {
     createNewUser: createNewUser,
     getAllUser: getAllUser,
+    getUserInfoById: getUserInfoById,
+    updateUserData: updateUserData,
 };

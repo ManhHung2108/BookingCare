@@ -12,6 +12,27 @@
             border: 1px solid black;
             border-collapse: collapse;
         }
+
+        .btn {
+            outline: none;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-edit {
+            background-color: greenyellow;
+            color: #fff;
+        }
+
+        .btn-delete {
+            background-color: rgb(238, 12, 12);
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -22,6 +43,7 @@
             <th>Firstname</th>
             <th>Lastname</th>
             <th>Address</th>
+            <th>Actions</th>
         </tr>
 
         <% for(let i=0; i < data.length; i++) { %>
@@ -37,6 +59,11 @@
                 </td>
                 <td>
                     <%= data[i].address %>
+                </td>
+                <td>
+                    <a href="http://localhost:8080/edit-crud?id=<%= data[i].id %>" class="btn-edit btn"
+                        type="button">Edit</a>
+                    <a class="btn-delete btn" type="button">Delete</a>
                 </td>
             </tr>
             <% } %>

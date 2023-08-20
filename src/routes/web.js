@@ -5,6 +5,8 @@ import {
     getCRUD,
     postCrud,
     displayCRUD,
+    getEditCRUD,
+    putCRUD,
 } from "../controllers/homeController";
 
 let router = express.Router();
@@ -17,6 +19,9 @@ let initWebRoutes = (app) => {
 
     router.post("/post-crud", postCrud); //chú ý gọi phương thức đúng ở đây là post
     router.get("/get-crud", displayCRUD);
+    router.get("/edit-crud", getEditCRUD);
+    //Nhấn nút update sẽ cập nhập csdl và quay lại trang /get-crud
+    router.post("/put-crud", putCRUD);
 
     // router.get("/students", (req, res) => {
     //     return res.send("Trang students");
