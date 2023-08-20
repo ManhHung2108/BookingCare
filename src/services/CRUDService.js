@@ -79,6 +79,37 @@ let updateUserData = async (data) => {
     }
 };
 
+let deleteUserById = (id) => {
+    if (id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                //C1
+                await db.User.destroy({
+                    where: {
+                        id: id,
+                    },
+                });
+
+                //C2: Tìm ra đối tượng sau đó mới xóa
+                // let userDelete = await db.User.findOne({
+                //     where: {
+                //         id: id,
+                //     },
+                // });
+                // if (userDelete) {
+                //     await userDelete.destroy();
+                // }
+                let allUser = await db.User.findAll();
+                resolve(allUser); //thoát khỏi promise, tương tự return
+            } catch (error) {
+                reject(error);
+            }
+        });
+    } else {
+        return false;
+    }
+};
+
 let hashUserPassWord = (passWord) => {
     //Dùng promise để đảm bảo hàm luôn trả cho chúng ta tránh việc bất đồng bộ của js
     return new Promise(async (resolve, reject) => {
@@ -96,4 +127,5 @@ module.exports = {
     getAllUser: getAllUser,
     getUserInfoById: getUserInfoById,
     updateUserData: updateUserData,
+    deleteUserById: deleteUserById,
 };

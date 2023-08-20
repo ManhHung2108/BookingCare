@@ -31,7 +31,7 @@ let postCrud = async (req, res) => {
     // console.log(req.body);
     let message = await CRUDService.createNewUser(req.body);
     console.log(message);
-    return res.send("post crud from server");
+    return res.send(message);
 };
 
 const displayCRUD = async (req, res) => {
@@ -66,10 +66,26 @@ const getEditCRUD = async (req, res) => {
 const putCRUD = async (req, res) => {
     let data = req.body;
     let allUser = await CRUDService.updateUserData(data);
+    //res.send("edit");
+
     //Khi cập nhập sau gọi render lại view
     return res.render("displayCRUD.ejs", {
         data: allUser,
     });
+};
+
+const deleteCRUD = async (req, res) => {
+    let userId = req.query.id;
+    // console.log(userId);
+    if (userId) {
+        let allUser = await CRUDService.deleteUserById(userId);
+        res.send("Delete user sucssed!");
+        // return res.render("displayCRUD.ejs", {
+        //     data: allUser,
+        // });
+    } else {
+        return res.send("Not Found!");
+    }
 };
 
 module.exports = {
@@ -80,4 +96,5 @@ module.exports = {
     displayCRUD,
     getEditCRUD,
     putCRUD,
+    deleteCRUD,
 };
