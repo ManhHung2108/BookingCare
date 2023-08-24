@@ -3,10 +3,14 @@ import bodyParser from "body-parser"; //hỗ trợ lấy tham số client gửi 
 import configViewEngine from "./config/viewEngine";
 import initWebRoutes from "./routes/web";
 import connectDB from "./config/connectDB";
+import cors from "cors";
 require("dotenv").config(); //để có thể sử dụng lệnh process.env
 
 //Tạo ra ứng dụng express
 const app = express();
+
+//cho phép nhận yêu cầu từ tất cả các miền
+app.use(cors({ origin: true }));
 
 //config app:
 

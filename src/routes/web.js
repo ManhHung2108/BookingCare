@@ -9,6 +9,7 @@ import {
     putCRUD,
     deleteCRUD,
 } from "../controllers/homeController";
+import userController from "../controllers/userController";
 
 let router = express.Router();
 
@@ -25,9 +26,9 @@ let initWebRoutes = (app) => {
     router.post("/put-crud", putCRUD); //click form có method là post
     router.get("/delete-crud", deleteCRUD); //chỉ là thẻ a chuyển trang thì ta chỉ cần dùng get
 
-    // router.get("/students", (req, res) => {
-    //     return res.send("Trang students");
-    // });
+    //Viết api
+    router.post("/api/login", userController.handleLogin);
+    router.get("/api/get-all-users", userController.handleGetAllUser);
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
