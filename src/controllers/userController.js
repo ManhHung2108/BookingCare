@@ -1,7 +1,7 @@
 import userService from "../services/userService";
 
 const handleGetAllUser = async (req, res) => {
-    let id = req.body.id; //All, id
+    let id = req.query.id; //All, id
     // console.log(id);
 
     //Validator trên server side
@@ -15,6 +15,7 @@ const handleGetAllUser = async (req, res) => {
 
     let users = await userService.getAllUser(id);
     // console.log(users);
+
     return res.status(200).json({
         errCode: 0,
         errMessage: "OK",
@@ -47,7 +48,37 @@ const handleLogin = async (req, res) => {
     });
 };
 
+let handleCreateNewUser = async (req, res) => {
+    let data = req.body;
+
+    let message = await userService.createNewUser(data);
+    // console.log(message);
+    return res.status(200).json(message);
+};
+
+let handleEditUser = async (req, res) => {
+    let data = req.body;
+    let message = await userService.updateUser(data);
+    res.status(200).json(message);
+};
+
+const handleDeleteUser = async (req, res) => {
+    let id = req.query.id;
+    if (!id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: "Không tìm thấy tham số yêu cầu",
+        });
+    }
+
+    let message = await userService.deleteUser(id);
+    return res.status(200).json(message);
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
+    handleCreateNewUser,
+    handleEditUser,
+    handleDeleteUser,
 };
