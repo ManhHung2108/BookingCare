@@ -110,30 +110,30 @@ let createNewUser = (data) => {
             if (checkEmail == true) {
                 resolve({
                     errCode: 1,
-                    message: "Email đã tồn tại!",
+                    errMessage: "Email đã tồn tại!",
+                });
+            } else {
+                let hashPassWordFromByScript = await hashUserPassWord(
+                    data.passWord
+                ); //lấy passWord đc hash promise trả về
+
+                //map đến table User trong model, tạo mới bằng hàm create
+                await db.User.create({
+                    email: data.email,
+                    passWord: hashPassWordFromByScript,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phoneNumber: data.phoneNumber,
+                    gender: data.gender === "1" ? true : false, //kểu boolean
+                    roleId: data.roleId,
+                });
+
+                resolve({
+                    errCode: 0,
+                    message: "OK",
                 });
             }
-
-            let hashPassWordFromByScript = await hashUserPassWord(
-                data.passWord
-            ); //lấy passWord đc hash promise trả về
-
-            //map đến table User trong model, tạo mới bằng hàm create
-            await db.User.create({
-                email: data.email,
-                passWord: hashPassWordFromByScript,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                phoneNumber: data.phoneNumber,
-                gender: data.gender === "1" ? true : false, //kểu boolean
-                roleId: data.roleId,
-            });
-
-            resolve({
-                errCode: 0,
-                message: "OK",
-            });
         } catch (error) {
             reject(error);
         }
@@ -198,6 +198,7 @@ let updateUser = (data) => {
 
 let deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {
+        console.log(id);
         try {
             let userDelete = await db.User.findOne({
                 where: { id: id },

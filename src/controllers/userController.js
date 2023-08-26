@@ -63,7 +63,8 @@ let handleEditUser = async (req, res) => {
 };
 
 const handleDeleteUser = async (req, res) => {
-    let id = req.query.id;
+    let id = req.params.id;
+
     if (!id) {
         return res.status(200).json({
             errCode: 1,
@@ -72,6 +73,7 @@ const handleDeleteUser = async (req, res) => {
     }
 
     let message = await userService.deleteUser(id);
+    console.log(message);
     return res.status(200).json(message);
 };
 
