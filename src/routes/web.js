@@ -26,11 +26,11 @@ let initWebRoutes = (app) => {
     router.post("/put-crud", putCRUD); //click form có method là post
     router.get("/delete-crud", deleteCRUD); //chỉ là thẻ a chuyển trang thì ta chỉ cần dùng get
 
-    //Viết api
+    //Viết api cho user
     router.post("/api/login", userController.handleLogin);
     router.get("/api/get-all-users", userController.handleGetAllUser); //http://localhost:8080/api/get-all-users?id=1
     router.post("/api/create-new-user", userController.handleCreateNewUser);
-    router.put("/api/edit-user", userController.handleEditUser);
+    router.put("/api/edit-user/:id", userController.handleEditUser);
     router.delete("/api/delete-user/:id", userController.handleDeleteUser); //restAPI
 
     //sử dụng router cho ứng dụng

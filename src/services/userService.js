@@ -102,6 +102,7 @@ let getAllUser = (userId) => {
 };
 
 let createNewUser = (data) => {
+    // console.log(data);
     return new Promise(async (resolve, reject) => {
         try {
             //check email có tồn tại không
@@ -152,10 +153,11 @@ let hashUserPassWord = (passWord) => {
     });
 };
 
-let updateUser = (data) => {
+let updateUser = (id, data) => {
+    // console.log(id, data);
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!id) {
                 resolve({
                     errCode: 2,
                     errMessage: "Không tồn tại người dùng!",
@@ -163,7 +165,7 @@ let updateUser = (data) => {
             }
 
             let user = await db.User.findOne({
-                where: { id: data.id },
+                where: { id: id },
             });
 
             if (user) {
@@ -198,7 +200,7 @@ let updateUser = (data) => {
 
 let deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {
-        console.log(id);
+        // console.log(id);
         try {
             let userDelete = await db.User.findOne({
                 where: { id: id },

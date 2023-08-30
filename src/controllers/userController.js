@@ -57,8 +57,9 @@ let handleCreateNewUser = async (req, res) => {
 };
 
 let handleEditUser = async (req, res) => {
-    let data = req.body;
-    let message = await userService.updateUser(data);
+    let id = req.params.id;
+    let updateData = req.body;
+    let message = await userService.updateUser(id, updateData);
     res.status(200).json(message);
 };
 
