@@ -228,10 +228,35 @@ let deleteUser = (id) => {
     });
 };
 
+let getAllCode = (typeCode) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!typeCode) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu",
+                });
+            } else {
+                let res = {};
+                //lấy ra tất cả code thỏa mãn where
+                let allcode = await db.Allcode.findAll({
+                    where: { type: typeCode },
+                });
+                res.errCode = 0;
+                res.data = allcode;
+                resolve(res); //trả về
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
     createNewUser,
     updateUser,
     deleteUser,
+    getAllCode,
 };

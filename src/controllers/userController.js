@@ -78,10 +78,26 @@ const handleDeleteUser = async (req, res) => {
     return res.status(200).json(message);
 };
 
+const handleGetAllCode = async (req, res) => {
+    try {
+        let data = await userService.getAllCode(req.query.type);
+        console.log("data getAllCode: ", data);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log("Get all code error: ", error);
+        //Khi không kết nối được thì chạy vào đây
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
     handleCreateNewUser,
     handleEditUser,
     handleDeleteUser,
+    handleGetAllCode,
 };
