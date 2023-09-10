@@ -27,7 +27,7 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             gender: {
-                type: Sequelize.BOOLEAN,
+                type: Sequelize.STRING,
             },
             image: {
                 type: Sequelize.STRING,
@@ -54,3 +54,5 @@ module.exports = {
 };
 
 /**Dùng để tự động map vào database cho chúng ta */
+
+// npx sequelize-cli db:migrate --to migration-create-user.js

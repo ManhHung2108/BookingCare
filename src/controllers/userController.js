@@ -39,7 +39,6 @@ const handleLogin = async (req, res) => {
     }
 
     let userData = await userService.handleUserLogin(email, passWord);
-
     //trả về dữ liệu
     return res.status(200).json({
         errCode: userData.errCode,
@@ -80,7 +79,7 @@ const handleDeleteUser = async (req, res) => {
 
 const handleGetAllCode = async (req, res) => {
     try {
-        let data = await userService.getAllCode(req.query.type);
+        let data = await userService.getAllCode(req.query.type); //là lấy tham số sau dấu ? http://localhost:8080/api/allcode?id=1
         console.log("data getAllCode: ", data);
         return res.status(200).json(data);
     } catch (error) {

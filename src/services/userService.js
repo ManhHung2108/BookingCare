@@ -11,12 +11,19 @@ let handleUserLogin = (email, passWord) => {
             if (isExist) {
                 //user already exist
                 let user = await db.User.findOne({
-                    attributes: ["email", "passWord", "roleId"], // Chỉ lấy ra các cột này
+                    attributes: [
+                        "email",
+                        "passWord",
+                        "roleId",
+                        "firstName",
+                        "lastName",
+                    ], // Chỉ lấy ra các cột này
                     where: {
                         email: email,
                     },
                     raw: true,
                 });
+
                 if (user) {
                     // compare passWord
                     let checkPassword = await bcrypt.compareSync(
@@ -126,8 +133,9 @@ let createNewUser = (data) => {
                     lastName: data.lastName,
                     address: data.address,
                     phoneNumber: data.phoneNumber,
-                    gender: data.gender === "1" ? true : false, //kểu boolean
-                    roleId: data.roleId,
+                    gender: data.gender,
+                    roleId: data.role,
+                    positionId: data.position,
                 });
 
                 resolve({
