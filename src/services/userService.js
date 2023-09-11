@@ -162,26 +162,28 @@ let hashUserPassWord = (passWord) => {
 };
 
 let updateUser = (id, data) => {
-    // console.log(id, data);
     return new Promise(async (resolve, reject) => {
         try {
-            if (!id) {
+            if (!id || !data.roleId || !data.positionId || !data.gender) {
                 resolve({
                     errCode: 2,
-                    errMessage: "Không tồn tại người dùng!",
+                    errMessage: "Yêu cầu nhập đầy đủ thông tin!",
                 });
             }
 
             let user = await db.User.findOne({
                 where: { id: id },
             });
-
             if (user) {
                 await db.User.update(
                     {
                         firstName: data.firstName,
                         lastName: data.lastName,
                         address: data.address,
+                        phoneNumber: data.phoneNumber,
+                        roleId: data.roleId,
+                        positionId: data.positionId,
+                        gender: data.gender,
                     },
                     {
                         where: {

@@ -59,6 +59,7 @@ let handleEditUser = async (req, res) => {
     let id = req.params.id;
     let updateData = req.body;
     let message = await userService.updateUser(id, updateData);
+
     res.status(200).json(message);
 };
 
@@ -80,7 +81,6 @@ const handleDeleteUser = async (req, res) => {
 const handleGetAllCode = async (req, res) => {
     try {
         let data = await userService.getAllCode(req.query.type); //là lấy tham số sau dấu ? http://localhost:8080/api/allcode?id=1
-        console.log("data getAllCode: ", data);
         return res.status(200).json(data);
     } catch (error) {
         console.log("Get all code error: ", error);
