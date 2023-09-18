@@ -10,6 +10,7 @@ import {
     deleteCRUD,
 } from "../controllers/homeController";
 import userController from "../controllers/userController";
+import doctorController from "../controllers/doctorController";
 
 let router = express.Router();
 
@@ -33,6 +34,9 @@ let initWebRoutes = (app) => {
     router.put("/api/edit-user/:id", userController.handleEditUser);
     router.delete("/api/delete-user/:id", userController.handleDeleteUser); //restAPI
     router.get("/api/allcode", userController.handleGetAllCode);
+
+    //Viết api cho doctor
+    router.get("/api/top-doctor-home", doctorController.handleGetTopDoctorHome);
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
