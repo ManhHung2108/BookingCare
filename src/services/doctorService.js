@@ -37,6 +37,61 @@ const getTopDoctorHome = (limit) => {
     });
 };
 
+let getAllDoctor = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let doctors = await db.User.findAll({
+                attributes: {
+                    exclude: ["passWord", "image"], //không lấy passWord
+                },
+                where: { roleId: "R2" },
+                raw: true,
+            });
+
+            resolve({
+                errCode: 0,
+                data: doctors,
+            });
+        } catch (error) {
+            // console.log(error);
+            reject(error);
+        }
+    });
+};
+
+let saveDetailInforDoctor = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (
+                !inputData.doctorId ||
+                !inputData.contentHTML ||
+                !inputData.contentMarkdown
+            ) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                await db.Markdown.create({
+                    contentHTML: inputData.contentHTML,
+                    contentMarkdown: inputData.contentMarkdown,
+                    description: inputData.description,
+                    doctorId: inputData.doctorId,
+                });
+
+                resolve({
+                    errCode: 0,
+                    message: "Lưu thông tin bác sĩ thành công!",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
+    getAllDoctor,
+    saveDetailInforDoctor,
 };
