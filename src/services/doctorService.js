@@ -104,7 +104,7 @@ const getDetailDoctorById = (id) => {
                         id: id,
                     },
                     attributes: {
-                        exclude: ["passWord", "image", "positionId"], //không lấy passWord
+                        exclude: ["passWord", "positionId"], //không lấy passWord
                     },
                     include: [
                         {
@@ -121,9 +121,18 @@ const getDetailDoctorById = (id) => {
                             ],
                         },
                     ],
-                    raw: true,
+                    raw: false,
                     nest: true,
                 });
+
+                if (data && data.image) {
+                    //convert base64 sang kiểu binary
+                    data.image = Buffer.from(data.image, "base64").toString(
+                        "binary"
+                    );
+                }
+
+                if (!data) data = {};
 
                 resolve({
                     errCode: 0,
