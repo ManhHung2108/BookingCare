@@ -38,10 +38,13 @@ let initWebRoutes = (app) => {
     //Viết api cho doctor
     router.get("/api/top-doctor-home", doctorController.handleGetTopDoctorHome);
     router.get("/api/get-all-doctor", doctorController.handleGetAllDoctor);
-    //Viết api lưu thêm thông tin chi tiết vào markdown cho doctor
     router.post(
         "/api/save-infor-doctor",
         doctorController.handlePostInforDoctor
+    );
+    router.get(
+        "/api/get-detail-doctor-by-id",
+        doctorController.handleGetDetailDoctorById
     );
 
     //sử dụng router cho ứng dụng

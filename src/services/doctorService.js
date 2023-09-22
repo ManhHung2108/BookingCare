@@ -90,8 +90,64 @@ let saveDetailInforDoctor = (inputData) => {
     });
 };
 
+const getDetailDoctorById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy bác sĩ yêu cầu!",
+                });
+            } else {
+                let data = await db.User.findOne({
+                    where: {
+                        id: id,
+                    },
+                    attributes: {
+                        exclude: ["passWord", "image", "positionId"], //không lấy passWord
+                    },
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "positionData", //chú ý đặt bên model tên mối quan hệ như nào thì phải lấy đúng
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Markdown,
+                            attributes: [
+                                "contentHTML",
+                                "contentMarkdown",
+                                "description",
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+
+                resolve({
+                    errCode: 0,
+                    data,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
     saveDetailInforDoctor,
+    getDetailDoctorById,
 };
+//- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
+//đối tượng Sequelize.
+
+//- Khi bạn đặt nest: true, Sequelize sẽ tự động tạo các mối quan hệ giữa các đối tượng kết quả truy vấn dựa trên các mối quan hệ
+//đã được định nghĩa trong mô hình dữ liệu của bạn.
+//- Điều này có nghĩa rằng các đối tượng con được nhúng bên trong các đối tượng cha một cách tự động theo các mối quan hệ đã được
+//định nghĩa trong mô hình dữ liệu.
+//- Thường được sử dụng khi bạn muốn dễ dàng truy cập dữ liệu liên quan và có mối quan hệ giữa các bảng trong cơ sở dữ liệu của bạn.

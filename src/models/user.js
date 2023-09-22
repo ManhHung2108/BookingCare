@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
             });
             //1 user chỉ chứa 1 position
             //sử dụng belongsTo đầu 1 được đặt ở User khóa ngoại positionId, gender tham chiếu tới keyMap của bảng allcodes
+
+            //Quan hệ 1-1: 1 bác sĩ có 1 bài đăng
+            User.hasOne(models.Markdown, { foreignKey: "doctorId" }); //khóa ngoại đặt ở bảng Markdown
         }
     }
     User.init(

@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Markdown.belongsTo(models.User, { foreignKey: "doctorId" }); //khóa ngoại đặt ở Markdown
+            //không dùng target sequelize tự lấy đến khóa chính bảng User
         }
     }
     Markdown.init(

@@ -45,8 +45,21 @@ const handlePostInforDoctor = async (req, res) => {
     }
 };
 
+const handleGetDetailDoctorById = async (req, res) => {
+    try {
+        let response = await doctorService.getDetailDoctorById(req.query.id);
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetTopDoctorHome,
     handleGetAllDoctor,
     handlePostInforDoctor,
+    handleGetDetailDoctorById,
 };
