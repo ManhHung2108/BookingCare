@@ -65,19 +65,38 @@ let saveDetailInforDoctor = (inputData) => {
             if (
                 !inputData.doctorId ||
                 !inputData.contentHTML ||
-                !inputData.contentMarkdown
+                !inputData.contentMarkdown ||
+                !inputData.action
             ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Không tìm thấy tham số yêu cầu!",
                 });
             } else {
-                await db.Markdown.create({
-                    contentHTML: inputData.contentHTML,
-                    contentMarkdown: inputData.contentMarkdown,
-                    description: inputData.description,
-                    doctorId: inputData.doctorId,
-                });
+                if (inputData.action === "") {
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.description,
+                        doctorId: inputData.doctorId,
+                    });
+                } else if (inputData.action === "EDIT") {
+                    //Sửa dữ liệu
+                    let markdown = await db.Markdown.findOne({
+                        where: { doctorId: inputData.doctorId },
+                        raw: false, //để dùng đc save() thì cần trả ra kiểu sequelize obj
+                    });
+
+                    if (markdown) {
+                        markdown.contentHTML = inputData.contentHTML;
+                        markdown.contentMarkdown = inputData.contentMarkdown;
+                        markdown.description = inputData.description;
+                        markdown.doctorId = inputData.doctorId;
+                        markdown.updatedAt = new Date(); //lấy time hiện tại
+
+                        await markdown.save();
+                    }
+                }
 
                 resolve({
                     errCode: 0,
