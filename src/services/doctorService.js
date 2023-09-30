@@ -1,4 +1,9 @@
+require("dotenv").config();
+import moment from "moment";
+import _ from "lodash";
 import db from "../models/index";
+
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 const getTopDoctorHome = (limit) => {
     return new Promise(async (resolve, reject) => {
@@ -165,11 +170,82 @@ const getDetailDoctorById = (id) => {
     });
 };
 
+const bulkCreateSchedule = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // console.log("check data bulkCreateSchedule: ", data);
+            if (!data.arrSchedule || !data.doctorId || !data.date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                let schedules = data.arrSchedule;
+                if (schedules && schedules.length > 0) {
+                    //Thêm thuộc tính để lưu vào csdl
+                    schedules = schedules.map((item) => {
+                        item.maxNumber = MAX_NUMBER_SCHEDULE;
+                        return item;
+                    });
+                }
+                // console.log("check data schedule send: ", schedules);
+
+                // Chuyển đổi định dạng ngày tháng cho dữ liệu gửi lên để cùng kiểu với server
+                const formattedDate = moment(data.date, "YYYY/MM/DD").format(
+                    "YYYY-MM-DD"
+                );
+
+                //Tìm ra tất cả kiểu time của doctor trong ngày được gửi lên
+                let existing = await db.Schedule.findAll({
+                    where: {
+                        doctorId: data.doctorId,
+                        date: formattedDate,
+                    },
+                    attributes: ["timeType", "date", "doctorId", "maxNumber"],
+                    //chỉ lấy ra 4 trường do từ react gửi lên chỉ có 4 trường để dùng lodash so sánh
+                    raw: true,
+                });
+
+                //convert date
+                if (existing && existing.length > 0) {
+                    existing = existing.map((item) => {
+                        item.date = moment(item.date).format("YYYY/MM/DD");
+                        return item;
+                    });
+                }
+
+                //- Tìm ra sự khác biệt với dữ liệu đã có và dữ liệu gửi lên dựa trên timeType và date,
+                //trả ra data của schedules khác so với existing
+                let toCreate = _.differenceWith(schedules, existing, (a, b) => {
+                    return a.timeType === b.timeType && a.date === b.date;
+                });
+
+                // console.log("check data exist: ", existing);
+                // console.log("check different ===================0");
+                // console.log(toCreate);
+                // console.log("check different ===================1");
+
+                //create data
+                if (toCreate && toCreate.length > 0) {
+                    await db.Schedule.bulkCreate(toCreate);
+                }
+                resolve({
+                    errCode: 0,
+                    message: "OK",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
     saveDetailInforDoctor,
     getDetailDoctorById,
+    bulkCreateSchedule,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.

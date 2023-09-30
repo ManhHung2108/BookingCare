@@ -46,6 +46,11 @@ let initWebRoutes = (app) => {
         "/api/get-detail-doctor-by-id",
         doctorController.handleGetDetailDoctorById
     );
+    //Viết api cho schedule
+    router.post(
+        "/api/bulk-create-schedule",
+        doctorController.handleBulkCreateSchedule
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
