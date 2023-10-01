@@ -51,6 +51,10 @@ let initWebRoutes = (app) => {
         "/api/bulk-create-schedule",
         doctorController.handleBulkCreateSchedule
     );
+    router.get(
+        "/api/get-schedule-doctor-by-date",
+        doctorController.handleGetScheduleDoctorByDate
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

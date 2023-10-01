@@ -70,10 +70,28 @@ const handleBulkCreateSchedule = async (req, res) => {
     }
 };
 
+const handleGetScheduleDoctorByDate = async (req, res) => {
+    // console.log(req.query);
+    try {
+        let response = await doctorService.getScheduleDoctorByDate(
+            req.query.doctorId,
+            req.query.date
+        );
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetTopDoctorHome,
     handleGetAllDoctor,
     handlePostInforDoctor,
     handleGetDetailDoctorById,
     handleBulkCreateSchedule,
+    handleGetScheduleDoctorByDate,
 };

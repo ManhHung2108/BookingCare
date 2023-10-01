@@ -207,18 +207,18 @@ const bulkCreateSchedule = (data) => {
                 });
 
                 //convert date
-                if (existing && existing.length > 0) {
-                    existing = existing.map((item) => {
-                        // item.date = moment(item.date).format("YYYY/MM/DD");
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    });
-                }
+                // if (existing && existing.length > 0) {
+                //     existing = existing.map((item) => {
+                //         // item.date = moment(item.date).format("YYYY/MM/DD");
+                //         item.date = new Date(item.date).getTime();
+                //         return item;
+                //     });
+                // }
 
                 //- Tìm ra sự khác biệt với dữ liệu đã có và dữ liệu gửi lên dựa trên timeType và date,
                 //trả ra data của schedules khác so với existing
                 let toCreate = _.differenceWith(schedules, existing, (a, b) => {
-                    return a.timeType === b.timeType && a.date === b.date;
+                    return a.timeType === b.timeType && a.date == b.date;
                 });
 
                 // console.log("check data exist: ", existing);
@@ -241,12 +241,46 @@ const bulkCreateSchedule = (data) => {
     });
 };
 
+const getScheduleDoctorByDate = (doctorId, date) => {
+    // console.log(doctorId, date);
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                let data = await db.Schedule.findAll({
+                    where: { doctorId: doctorId, date: date },
+                    // raw: false,
+                });
+
+                // console.log(data);
+
+                if (!data) {
+                    data = [];
+                }
+
+                resolve({
+                    errCode: 0,
+                    data,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
     saveDetailInforDoctor,
     getDetailDoctorById,
     bulkCreateSchedule,
+    getScheduleDoctorByDate,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.
