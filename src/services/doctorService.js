@@ -190,16 +190,16 @@ const bulkCreateSchedule = (data) => {
                 }
                 // console.log("check data schedule send: ", schedules);
 
-                // Chuyển đổi định dạng ngày tháng cho dữ liệu gửi lên để cùng kiểu với server
-                const formattedDate = moment(data.date, "YYYY/MM/DD").format(
-                    "YYYY-MM-DD"
-                );
+                //C1: Chuyển đổi định dạng ngày tháng cho dữ liệu gửi lên để cùng kiểu với server
+                // const formattedDate = moment(data.date, "YYYY/MM/DD").format(
+                //     "YYYY-MM-DD"
+                // );
 
                 //Tìm ra tất cả kiểu time của doctor trong ngày được gửi lên
                 let existing = await db.Schedule.findAll({
                     where: {
                         doctorId: data.doctorId,
-                        date: formattedDate,
+                        date: data.date,
                     },
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     //chỉ lấy ra 4 trường do từ react gửi lên chỉ có 4 trường để dùng lodash so sánh
@@ -209,7 +209,8 @@ const bulkCreateSchedule = (data) => {
                 //convert date
                 if (existing && existing.length > 0) {
                     existing = existing.map((item) => {
-                        item.date = moment(item.date).format("YYYY/MM/DD");
+                        // item.date = moment(item.date).format("YYYY/MM/DD");
+                        item.date = new Date(item.date).getTime();
                         return item;
                     });
                 }
@@ -225,7 +226,7 @@ const bulkCreateSchedule = (data) => {
                 // console.log(toCreate);
                 // console.log("check different ===================1");
 
-                //create data
+                // //create data
                 if (toCreate && toCreate.length > 0) {
                     await db.Schedule.bulkCreate(toCreate);
                 }
