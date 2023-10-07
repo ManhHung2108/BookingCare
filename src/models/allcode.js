@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
 
             //1 position có thể có nhiều User
             //sử dụng hasMany: khóa ngoại positionId, gender được đặt ở bảng Users
+
+            Allcode.hasMany(models.Schedule, {
+                foreignKey: "timeType",
+                as: "timeData",
+            });
         }
     }
     Allcode.init(

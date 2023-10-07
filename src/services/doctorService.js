@@ -253,7 +253,15 @@ const getScheduleDoctorByDate = (doctorId, date) => {
             } else {
                 let data = await db.Schedule.findAll({
                     where: { doctorId: doctorId, date: date },
-                    // raw: false,
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "timeData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
                 });
 
                 // console.log(data);
