@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 
             //Quan hệ 1-1: 1 bác sĩ có 1 bài đăng
             User.hasOne(models.Markdown, { foreignKey: "doctorId" }); //khóa ngoại đặt ở bảng Markdown
+
+            //Quan hệ 1-1: 1 bác sĩ có 1 thông tin
+            User.hasOne(models.Doctor_Infor, { foreignKey: "doctorId" }); //khóa ngoại đặt ở bảng Doctor_Infor
         }
     }
     User.init(
