@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
                 as: "priceData",
             });
             Doctor_Infor.belongsTo(models.Allcode, {
-                foreignKey: "priceId",
+                foreignKey: "paymentId",
                 targetKey: "keyMap",
                 as: "paymentData",
             });

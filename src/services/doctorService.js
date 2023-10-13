@@ -347,6 +347,59 @@ const getScheduleDoctorByDate = (doctorId, date) => {
     });
 };
 
+const getExtraInforDoctorById = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                let data = await db.Doctor_Infor.findOne({
+                    where: { doctorId: doctorId },
+                    attributes: {
+                        exclude: ["id", "doctorId"],
+                    },
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "priceData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Allcode,
+                            as: "paymentData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Allcode,
+                            as: "provinceData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+
+                // console.log(data);
+
+                if (!data) {
+                    data = {};
+                }
+
+                resolve({
+                    errCode: 0,
+                    data,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -354,6 +407,7 @@ module.exports = {
     getDetailDoctorById,
     bulkCreateSchedule,
     getScheduleDoctorByDate,
+    getExtraInforDoctorById,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.
