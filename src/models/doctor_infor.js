@@ -5,6 +5,22 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Doctor_Infor.belongsTo(models.User, { foreignKey: "doctorId" }); //khóa ngoại đặt ở Doctor_Infor
+
+            Doctor_Infor.belongsTo(models.Allcode, {
+                foreignKey: "priceId",
+                targetKey: "keyMap",
+                as: "priceData",
+            });
+            Doctor_Infor.belongsTo(models.Allcode, {
+                foreignKey: "priceId",
+                targetKey: "keyMap",
+                as: "paymentData",
+            });
+            Doctor_Infor.belongsTo(models.Allcode, {
+                foreignKey: "provinceId",
+                targetKey: "keyMap",
+                as: "provinceData",
+            });
         }
     }
     Doctor_Infor.init(
