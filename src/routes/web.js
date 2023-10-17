@@ -59,6 +59,10 @@ let initWebRoutes = (app) => {
         "/api/get-extra-infor-doctor-by-id",
         doctorController.handleGetExtraInforDoctorById
     );
+    router.get(
+        "/api/get-profile-doctor-by-id",
+        doctorController.handleGetProfileDoctorById
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

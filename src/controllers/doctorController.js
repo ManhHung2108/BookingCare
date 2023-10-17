@@ -103,6 +103,21 @@ const handleGetExtraInforDoctorById = async (req, res) => {
     }
 };
 
+const handleGetProfileDoctorById = async (req, res) => {
+    try {
+        let profile = await doctorService.getProfileDoctorById(
+            req.query.doctorId
+        );
+        return res.status(200).json(profile);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetTopDoctorHome,
     handleGetAllDoctor,
@@ -111,4 +126,5 @@ module.exports = {
     handleBulkCreateSchedule,
     handleGetScheduleDoctorByDate,
     handleGetExtraInforDoctorById,
+    handleGetProfileDoctorById,
 };

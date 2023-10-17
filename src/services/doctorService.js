@@ -400,6 +400,83 @@ const getExtraInforDoctorById = (doctorId) => {
     });
 };
 
+const getProfileDoctorById = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                let data = await db.User.findOne({
+                    where: { id: doctorId },
+                    attributes: {
+                        exclude: ["passWord"],
+                    },
+                    include: [
+                        {
+                            model: db.Markdown,
+                            attributes: [
+                                "contentHTML",
+                                "contentMarkdown",
+                                "description",
+                            ],
+                        },
+                        {
+                            model: db.Allcode,
+                            as: "positionData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Doctor_Infor,
+                            attributes: {
+                                exclude: ["id", "doctorId"],
+                            },
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: "priceData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: "provinceData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                                {
+                                    model: db.Allcode,
+                                    as: "paymentData",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
+                });
+
+                if (data && data.image) {
+                    //convert để trả image về kiểu base 64
+                    data.image = new Buffer(data.image, "base64").toString(
+                        "binary"
+                    );
+                }
+
+                if (!data) data = {};
+
+                resolve({
+                    errCode: 0,
+                    data,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -408,6 +485,7 @@ module.exports = {
     bulkCreateSchedule,
     getScheduleDoctorByDate,
     getExtraInforDoctorById,
+    getProfileDoctorById,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.
