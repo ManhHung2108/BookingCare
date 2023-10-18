@@ -16,6 +16,10 @@ const postBookAppointment = (data) => {
                     defaults: {
                         email: data.email,
                         roleId: "R3",
+                        address: data.address ? data.address : null,
+                        phoneNumber: data.phoneNumber ? data.phoneNumber : null,
+                        gender: data.gender ? data.gender : null,
+                        lastName: data.fullName ? data.fullName : null,
                     },
                 });
                 // console.log("check user form postBookAppointment: ", user);
