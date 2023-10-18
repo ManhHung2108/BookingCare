@@ -20,6 +20,7 @@ const postBookAppointment = (data) => {
                         phoneNumber: data.phoneNumber ? data.phoneNumber : null,
                         gender: data.gender ? data.gender : null,
                         lastName: data.fullName ? data.fullName : null,
+                        birthday: data.birthDay ? data.birthDay : null,
                     },
                 });
                 // console.log("check user form postBookAppointment: ", user);
