@@ -1,5 +1,6 @@
 import db from "../models/index";
 require("dotenv").config();
+import emailService from "./emailService";
 
 const postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -10,6 +11,14 @@ const postBookAppointment = (data) => {
                     errMessage: "Không tìm thấy tham số yêu cầu!",
                 });
             } else {
+                await emailService.sendSimpleEmail({
+                    receiverEmail: data.email,
+                    patientName: "Đỗ Mạnh Hùng",
+                    time: "8:00-9:00",
+                    doctorName: "Đỗ Thị Huyền",
+                    redirectLink: "https://www.facebook.com/",
+                });
+
                 //nếu có thì trả về, không có thì tạo mới(defaults)
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
