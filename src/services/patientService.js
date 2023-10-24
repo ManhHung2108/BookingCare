@@ -5,7 +5,13 @@ import emailService from "./emailService";
 const postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.date || !data.doctorId || !data.timeType) {
+            if (
+                !data.email ||
+                !data.date ||
+                !data.doctorId ||
+                !data.timeType ||
+                !data.fullName
+            ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Không tìm thấy tham số yêu cầu!",
@@ -13,9 +19,10 @@ const postBookAppointment = (data) => {
             } else {
                 await emailService.sendSimpleEmail({
                     receiverEmail: data.email,
-                    patientName: "Đỗ Mạnh Hùng",
-                    time: "8:00-9:00",
-                    doctorName: "Đỗ Thị Huyền",
+                    patientName: data.fullName,
+                    time: data.timeString,
+                    doctorName: data.doctorName,
+                    language: data.language,
                     redirectLink: "https://www.facebook.com/",
                 });
 

@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             patientId: DataTypes.INTEGER,
             date: DataTypes.STRING, //tương tự TIMESTAMP trong SQL
             timeType: DataTypes.STRING,
+            token: DataTypes.STRING, //xác thực booking để xác nhận
         },
         {
             sequelize,

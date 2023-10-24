@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
 
             //Quan hệ 1-1: 1 bác sĩ có 1 thông tin
             User.hasOne(models.Doctor_Infor, { foreignKey: "doctorId" }); //khóa ngoại đặt ở bảng Doctor_Infor
+
+            //Quan hện 1-n: 1 bác sĩ có nhiều kế hoạch khám bệnh
+            User.hasMany(models.Schedule, {
+                foreignKey: "doctorId",
+                as: "doctorData",
+            });
         }
     }
     User.init(
