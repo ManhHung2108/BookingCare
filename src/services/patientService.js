@@ -24,15 +24,6 @@ const postBookAppointment = (data) => {
             } else {
                 let token = uuidv4(); //tạo ra một chuỗi ngẫu nhiên
 
-                await emailService.sendSimpleEmail({
-                    receiverEmail: data.email,
-                    patientName: data.fullName,
-                    time: data.timeString,
-                    doctorName: data.doctorName,
-                    language: data.language,
-                    redirectLink: buildUrlEmail(data.doctorId, token),
-                });
-
                 //nếu có thì trả về, không có thì tạo mới(defaults)
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
@@ -51,8 +42,12 @@ const postBookAppointment = (data) => {
                 //create a booking record
                 if (user && user[0]) {
                     //nếu có lịch hẹn rồi thì không cho spam
-                    await db.Booking.findOrCreate({
-                        where: { patientId: user[0].id },
+                    let booking = await db.Booking.findOrCreate({
+                        where: {
+                            patientId: user[0].id,
+                            doctorId: data.doctorId,
+                            date: data.date,
+                        },
                         defaults: {
                             statusId: "S1",
                             doctorId: data.doctorId,
@@ -62,11 +57,29 @@ const postBookAppointment = (data) => {
                             token: token,
                         },
                     });
+
+                    //Nếu tạo được booking thì mới cho gửi email
+                    if (booking && booking[1] === true) {
+                        await emailService.sendSimpleEmail({
+                            receiverEmail: data.email,
+                            patientName: data.fullName,
+                            time: data.timeString,
+                            doctorName: data.doctorName,
+                            language: data.language,
+                            redirectLink: buildUrlEmail(data.doctorId, token),
+                        });
+
+                        resolve({
+                            errCode: 0,
+                            message: "Đặt lịch hẹn thành công!",
+                        });
+                    }
                 }
 
                 resolve({
-                    errCode: 0,
-                    message: "Đặt lịch hẹn thành công!",
+                    errCode: 2,
+                    errMessage:
+                        "Bạn đã có lịch hẹn với bác sĩ này ngày hôm nay thành công!",
                 });
             }
         } catch (error) {
