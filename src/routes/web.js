@@ -70,6 +70,10 @@ let initWebRoutes = (app) => {
         "/api/patient-book-appointment",
         patientController.handlePostBookAppointment
     );
+    router.post(
+        "/api/verify-book-appointment",
+        patientController.handlePostVerifyBookAppointment
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

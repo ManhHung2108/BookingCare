@@ -12,6 +12,20 @@ let handlePostBookAppointment = async (req, res) => {
     }
 };
 
+let handlePostVerifyBookAppointment = async (req, res) => {
+    try {
+        let verify = await patientService.postVerifyBookAppointment(req.body);
+        return res.status(200).json(verify);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handlePostBookAppointment,
+    handlePostVerifyBookAppointment,
 };

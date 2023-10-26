@@ -9,7 +9,7 @@ require("dotenv").config(); //để có thể sử dụng lệnh process.env
 //Tạo ra ứng dụng express
 const app = express();
 
-//cho phép nhận yêu cầu từ tất cả các miền, đặt trước các route
+//cho phép nhận yêu cầu từ tất cả các miền và phải đặt trước các route
 app.use(cors({ origin: true }));
 
 // Add headers before the routes are defined
