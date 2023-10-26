@@ -74,12 +74,16 @@ const postBookAppointment = (data) => {
                             message: "Đặt lịch hẹn thành công!",
                         });
                     }
+                    resolve({
+                        errCode: 2,
+                        errMessage:
+                            "Bạn đã có lịch hẹn với bác sĩ này ngày hôm nay thành công!",
+                    });
                 }
 
                 resolve({
-                    errCode: 2,
-                    errMessage:
-                        "Bạn đã có lịch hẹn với bác sĩ này ngày hôm nay thành công!",
+                    errCode: 0,
+                    message: "Đặt lịch hẹn thành công!",
                 });
             }
         } catch (error) {
