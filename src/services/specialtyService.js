@@ -15,7 +15,8 @@ const createSpecialty = (data) => {
                 });
             } else {
                 await db.Specialty.create({
-                    name: data.name,
+                    nameVi: data.name,
+                    nameEn: data.nameEn,
                     image: data.imageBase64,
                     descriptionHTML: data.descriptionHTML,
                     descriptionMarkdown: data.descriptionMarkdown,
