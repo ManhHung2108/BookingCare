@@ -12,6 +12,20 @@ const handleCreateSpecialty = async (req, res) => {
     }
 };
 
+const handleGetAllSpecialty = async (req, res) => {
+    try {
+        let result = await specialtyService.getAllSpecialty();
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleCreateSpecialty,
+    handleGetAllSpecialty,
 };

@@ -32,6 +32,37 @@ const createSpecialty = (data) => {
         }
     });
 };
+
+const getAllSpecialty = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Specialty.findAll({
+                raw: false,
+            });
+            if (data && data.length > 0) {
+                // console.log("check data from getAllSpecialty: ", data);
+
+                //gán lại thuộc tính image type từ Blob -> binary(base64)
+                data.map((item, index) => {
+                    item.image = data.image = Buffer.from(
+                        item.image,
+                        "base64"
+                    ).toString("binary");
+                    return item;
+                });
+            }
+            resolve({
+                errCode: 0,
+                message: "OK",
+                data,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     createSpecialty,
+    getAllSpecialty,
 };

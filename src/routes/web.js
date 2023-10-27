@@ -81,6 +81,10 @@ let initWebRoutes = (app) => {
         "/api/create-new-specialty",
         specialtyControler.handleCreateSpecialty
     );
+    router.get(
+        "/api/get-all-specialty",
+        specialtyControler.handleGetAllSpecialty
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
