@@ -1,8 +1,8 @@
 import specialtyService from "../services/specialtyService";
 const handleCreateSpecialty = async (req, res) => {
     try {
-        let res = await specialtyService.createSpecialty;
-        return res.status(200).json(res);
+        let result = await specialtyService.createSpecialty(req.body);
+        return res.status(200).json(result);
     } catch (error) {
         console.log(error);
         return res.status(200).json({

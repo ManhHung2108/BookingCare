@@ -1,6 +1,6 @@
 import db from "../models/index";
 const createSpecialty = (data) => {
-    console.log("check data from createSpecialty: ", data);
+    // console.log("check data from createSpecialty: ", data);
     return new Promise(async (resolve, reject) => {
         try {
             if (
