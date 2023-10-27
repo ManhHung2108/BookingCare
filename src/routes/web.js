@@ -12,6 +12,7 @@ import {
 import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
+import specialtyControler from "../controllers/specialtyControler";
 
 let router = express.Router();
 
@@ -73,6 +74,12 @@ let initWebRoutes = (app) => {
     router.post(
         "/api/verify-book-appointment",
         patientController.handlePostVerifyBookAppointment
+    );
+
+    //Viết api quản lý chuyên khoa
+    router.post(
+        "/api/create-new-specialty",
+        specialtyControler.handleCreateSpecialty
     );
 
     //sử dụng router cho ứng dụng
