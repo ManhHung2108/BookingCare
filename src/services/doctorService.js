@@ -64,22 +64,44 @@ let getAllDoctor = () => {
     });
 };
 
+//Validate data gửi lên
+let checkRequiredFields = (inputData) => {
+    let arr = [
+        "doctorId",
+        "contentHTML",
+        "contentMarkdown",
+        "action",
+        "priceId",
+        "paymentId",
+        "provinceId",
+        "specialtyId",
+    ];
+
+    let isValid = true;
+    let element = "";
+
+    for (let i = 0; i < arr.length; i++) {
+        if (!inputData[arr[i]]) {
+            isValid = false;
+            element = arr[i];
+            break;
+        }
+    }
+
+    return {
+        isValid,
+        element,
+    };
+};
+
 let saveDetailInforDoctor = (inputData) => {
-    console.log(inputData);
     return new Promise(async (resolve, reject) => {
         try {
-            if (
-                !inputData.doctorId ||
-                !inputData.contentHTML ||
-                !inputData.contentMarkdown ||
-                !inputData.action ||
-                !inputData.priceId ||
-                !inputData.paymentId ||
-                !inputData.provinceId
-            ) {
+            let check = checkRequiredFields(inputData);
+            if (check.isValid === false) {
                 resolve({
                     errCode: 1,
-                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                    errMessage: `Không tìm thấy ${check.element}!`,
                 });
             } else {
                 if (inputData.action === "") {
@@ -124,6 +146,8 @@ let saveDetailInforDoctor = (inputData) => {
                     doctorInfor.nameClinic = inputData.nameClinic;
                     doctorInfor.addressClinic = inputData.addressClinic;
                     doctorInfor.note = inputData.note;
+                    doctorInfor.specialtyId = inputData.specialtyId;
+                    doctorInfor.clinicId = inputData.clinicId;
                     doctorInfor.updatedAt = new Date(); //lấy time hiện tại
 
                     await doctorInfor.save();
@@ -134,6 +158,8 @@ let saveDetailInforDoctor = (inputData) => {
                         priceId: inputData.priceId,
                         paymentId: inputData.paymentId,
                         provinceId: inputData.provinceId,
+                        specialtyId: inputData.specialtyId,
+                        clinicId: inputData.clinicId,
                         nameClinic: inputData.nameClinic,
                         addressClinic: inputData.addressClinic,
                         note: inputData.note,
@@ -190,6 +216,8 @@ const getDetailDoctorById = (id) => {
                                 "priceId",
                                 "paymentId",
                                 "provinceId",
+                                "specialtyId",
+                                "clinicId",
                             ],
                             include: [
                                 {
