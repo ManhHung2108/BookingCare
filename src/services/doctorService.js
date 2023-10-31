@@ -95,6 +95,7 @@ let checkRequiredFields = (inputData) => {
 };
 
 let saveDetailInforDoctor = (inputData) => {
+    console.log(inputData);
     return new Promise(async (resolve, reject) => {
         try {
             let check = checkRequiredFields(inputData);
@@ -104,7 +105,7 @@ let saveDetailInforDoctor = (inputData) => {
                     errMessage: `Không tìm thấy ${check.element}!`,
                 });
             } else {
-                if (inputData.action === "") {
+                if (inputData.action === "CREATE") {
                     //upsert to Markdown
                     await db.Markdown.create({
                         contentHTML: inputData.contentHTML,

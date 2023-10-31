@@ -86,6 +86,12 @@ let initWebRoutes = (app) => {
         specialtyControler.handleGetAllSpecialty
     );
 
+    //Viết api cho chi tiết chuyên khoa
+    router.get(
+        "/api/get-detail-specialty-by-id",
+        specialtyControler.handleGetDetailSpecialtyById
+    );
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };
