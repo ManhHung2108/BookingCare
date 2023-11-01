@@ -1,6 +1,5 @@
 import db from "../models/index";
 const createClinic = (data) => {
-    // console.log("check data from createClinic: ", data);
     return new Promise(async (resolve, reject) => {
         try {
             if (
@@ -8,17 +7,19 @@ const createClinic = (data) => {
                 !data.imageBase64 ||
                 !data.descriptionHTML ||
                 !data.descriptionMarkdown ||
-                !data.address
+                !data.address ||
+                !data.provinceId
             ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Không tìm thấy tham số yêu cầu!",
                 });
             } else {
-                await db.Specialty.create({
+                await db.Clinic.create({
                     nameVi: data.name,
                     nameEn: data.nameEn,
                     address: data.address,
+                    provinceId: data.provinceId,
                     image: data.imageBase64,
                     descriptionHTML: data.descriptionHTML,
                     descriptionMarkdown: data.descriptionMarkdown,
@@ -26,7 +27,7 @@ const createClinic = (data) => {
 
                 resolve({
                     errCode: 0,
-                    message: "Thêm chuyên khoa thành công!",
+                    message: "Thêm phòng khám thành công!",
                 });
             }
         } catch (error) {
