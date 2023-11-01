@@ -13,6 +13,7 @@ import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyControler from "../controllers/specialtyControler";
+import clinicControler from "../controllers/clinicControler";
 
 let router = express.Router();
 
@@ -85,13 +86,14 @@ let initWebRoutes = (app) => {
         "/api/get-all-specialty",
         specialtyControler.handleGetAllSpecialty
     );
-
     //Viết api cho chi tiết chuyên khoa
     router.get(
         "/api/get-detail-specialty-by-id",
         specialtyControler.handleGetDetailSpecialtyById
     );
 
+    //Viết api quản lý phòng khám
+    router.post("/api/create-new-clinic", clinicControler.handleCreateClinic);
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

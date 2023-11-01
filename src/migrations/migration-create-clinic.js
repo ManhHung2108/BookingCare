@@ -17,6 +17,9 @@ module.exports = {
             address: {
                 type: Sequelize.STRING,
             },
+            provinceId: {
+                type: Sequelize.STRING,
+            },
             descriptionHTML: {
                 type: Sequelize.TEXT("long"),
             },

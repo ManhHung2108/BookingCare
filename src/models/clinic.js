@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             nameVi: DataTypes.STRING,
             nameEn: DataTypes.STRING,
             address: DataTypes.STRING,
+            provinceId: DataTypes.STRING,
             descriptionHTML: DataTypes.TEXT("long"),
             descriptionMarkdown: DataTypes.TEXT("long"),
             image: DataTypes.TEXT,
