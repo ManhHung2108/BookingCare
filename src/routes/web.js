@@ -94,6 +94,12 @@ let initWebRoutes = (app) => {
 
     //Viết api quản lý phòng khám
     router.post("/api/create-new-clinic", clinicControler.handleCreateClinic);
+    router.get("/api/get-clinic", clinicControler.handleGetAllClinic);
+    router.get(
+        "/api/get-detail-clinic-by-id",
+        clinicControler.handleGetDetailClinicById
+    );
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };
