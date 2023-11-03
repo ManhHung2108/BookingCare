@@ -28,7 +28,8 @@ const handleGetDetailClinicById = async (req, res) => {
     try {
         let result = await clinicService.getDetailClinicById(
             req.query.id,
-            req.query.location
+            req.query.location,
+            req.query.search
         );
         return res.status(200).json(result);
     } catch (error) {

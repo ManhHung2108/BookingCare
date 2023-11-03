@@ -1,4 +1,5 @@
 import db from "../models/index";
+const { Op } = require("sequelize");
 const createClinic = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -65,7 +66,7 @@ const getAllClinic = () => {
     });
 };
 
-const getDetailClinicById = (id, location) => {
+const getDetailClinicById = (id, location, search) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!id || !location) {
@@ -75,33 +76,88 @@ const getDetailClinicById = (id, location) => {
                 });
             } else {
                 let data = {};
-
                 data = await db.Clinic.findOne({
-                    where: { id: id },
+                    where: {
+                        id: id,
+                    },
                     attributes: [
                         "descriptionHTML",
                         "descriptionMarkdown",
                         "nameEn",
                         "nameVi",
                         "image",
+                        "address",
                     ],
                 });
 
                 if (data) {
                     let doctorClinic = [];
+                    let queryDoctorInfor = {
+                        where: { clinicId: id },
+                        attributes: ["doctorId", "provinceId"],
+                    };
+
                     if (location === "ALL") {
-                        doctorClinic = await db.Doctor_Infor.findAll({
-                            where: { clinicId: id },
-                            attributes: ["doctorId", "provinceId"],
-                        });
+                        if (search) {
+                            const doctorIds = await db.User.findAll({
+                                where: {
+                                    [Op.or]: [
+                                        {
+                                            lastName: {
+                                                [Op.like]: `%${search}%`,
+                                            },
+                                        },
+                                        {
+                                            firstName: {
+                                                [Op.like]: `%${search}%`,
+                                            },
+                                        },
+                                    ],
+                                },
+                                attributes: ["id", "firstName", "lastName"],
+                            });
+
+                            if (doctorIds.length > 0) {
+                                //tìm kiếm trong một danh sách các giá trị <=> SELECT * FROM users WHERE id IN (1, 2, 3);
+                                queryDoctorInfor.where.doctorId = {
+                                    [Op.in]: doctorIds.map((user) => user.id),
+                                };
+                            }
+                        }
+
+                        doctorClinic = await db.Doctor_Infor.findAll(
+                            queryDoctorInfor
+                        );
                     } else {
-                        doctorClinic = await db.Doctor_Infor.findAll({
-                            where: {
-                                clinicId: id,
-                                provinceId: location,
-                            },
-                            attributes: ["doctorId", "provinceId"],
-                        });
+                        queryDoctorInfor.where.provinceId = location;
+                        if (search) {
+                            const doctorIds = await db.User.findAll({
+                                where: {
+                                    [Op.or]: [
+                                        {
+                                            lastName: {
+                                                [Op.like]: `%${search}%`,
+                                            },
+                                        },
+                                        {
+                                            firstName: {
+                                                [Op.like]: `%${search}%`,
+                                            },
+                                        },
+                                    ],
+                                },
+                                attributes: ["id", "firstName", "lastName"],
+                            });
+
+                            if (doctorIds.length > 0) {
+                                queryDoctorInfor.where.doctorId = {
+                                    [Op.in]: doctorIds.map((user) => user.id),
+                                };
+                            }
+                        }
+                        doctorClinic = await db.Doctor_Infor.findAll(
+                            queryDoctorInfor
+                        );
                     }
 
                     //Lấy ra tất cả bác sĩ thuộc chuyên khoa, tỉnh thành
