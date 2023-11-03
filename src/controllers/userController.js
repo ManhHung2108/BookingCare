@@ -92,6 +92,34 @@ const handleGetAllCode = async (req, res) => {
     }
 };
 
+const handleSearchByName = async (req, res) => {
+    try {
+        let data = await userService.getDataByName(req.query.q);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log("Get all code error: ", error);
+        //Khi không kết nối được thì chạy vào đây
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
+const handleGetDataSearch = async (req, res) => {
+    try {
+        let data = await userService.getDataSearch();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log("Get all code error: ", error);
+        //Khi không kết nối được thì chạy vào đây
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
@@ -99,4 +127,6 @@ module.exports = {
     handleEditUser,
     handleDeleteUser,
     handleGetAllCode,
+    handleSearchByName,
+    handleGetDataSearch,
 };

@@ -1,5 +1,6 @@
 import e from "express";
 import db from "../models/index";
+const { Op } = require("sequelize");
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
 
@@ -264,6 +265,219 @@ let getAllCode = (typeCode) => {
     });
 };
 
+let getDataByName = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu",
+                });
+            } else {
+                let res = {};
+                //lấy ra tất cả code thỏa mãn where
+                let resSpecialty = await db.Specialty.findAll({
+                    where: {
+                        nameVi: {
+                            [Op.like]: `%${query}%`,
+                        },
+                    },
+                    attributes: ["id", "nameVi", "nameEn", "image"],
+                });
+                //convert image
+                if (resSpecialty && resSpecialty.length > 0) {
+                    resSpecialty.map((item) => {
+                        item.image = resSpecialty.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                let resClinic = await db.Clinic.findAll({
+                    where: {
+                        nameVi: {
+                            [Op.like]: `%${query}%`,
+                        },
+                    },
+
+                    attributes: ["id", "nameVi", "nameEn", "image"],
+                });
+                //convert image
+                if (resClinic && resClinic.length > 0) {
+                    resClinic.map((item) => {
+                        item.image = resClinic.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                let resDoctor = await db.User.findAll({
+                    where: {
+                        [Op.or]: [
+                            {
+                                lastName: {
+                                    [Op.like]: `%${query}%`,
+                                },
+                            },
+                            {
+                                firstName: {
+                                    [Op.like]: `%${query}%`,
+                                },
+                            },
+                        ],
+                        roleId: "R2",
+                    },
+                    attributes: ["id", "firstName", "lastName", "image"],
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "positionData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Doctor_Infor,
+                            attributes: [
+                                "addressClinic",
+                                "nameClinic",
+                                "note",
+                                "priceId",
+                                "paymentId",
+                                "provinceId",
+                                "specialtyId",
+                                "clinicId",
+                            ],
+                            include: [
+                                {
+                                    model: db.Specialty,
+                                    as: "specialtyData",
+                                    attributes: ["nameEn", "nameVi", "image"],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
+                });
+                //convert image
+                if (resDoctor && resDoctor.length > 0) {
+                    resDoctor.map((item) => {
+                        item.image = resDoctor.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                res.errCode = 0;
+                res.data = {
+                    resSpecialty,
+                    resDoctor,
+                    resClinic,
+                };
+                resolve(res); //trả về
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const getDataSearch = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            //lấy ra tất cả code thỏa mãn where
+            let resSpecialty = await db.Specialty.findAll();
+            //convert image
+            if (resSpecialty && resSpecialty.length > 0) {
+                resSpecialty.map((item) => {
+                    item.image = resSpecialty.image = Buffer.from(
+                        item.image,
+                        "base64"
+                    ).toString("binary");
+                    return item;
+                });
+            }
+
+            let resClinic = await db.Clinic.findAll();
+            //convert image
+            if (resClinic && resClinic.length > 0) {
+                resClinic.map((item) => {
+                    item.image = resClinic.image = Buffer.from(
+                        item.image,
+                        "base64"
+                    ).toString("binary");
+                    return item;
+                });
+            }
+
+            let resDoctor = await db.User.findAll({
+                where: {
+                    roleId: "R2",
+                },
+                attributes: ["id", "firstName", "lastName", "image"],
+                include: [
+                    {
+                        model: db.Allcode,
+                        as: "positionData",
+                        attributes: ["valueEn", "valueVi"],
+                    },
+                    {
+                        model: db.Doctor_Infor,
+                        attributes: [
+                            "addressClinic",
+                            "nameClinic",
+                            "note",
+                            "priceId",
+                            "paymentId",
+                            "provinceId",
+                            "specialtyId",
+                            "clinicId",
+                        ],
+                        include: [
+                            {
+                                model: db.Specialty,
+                                as: "specialtyData",
+                                attributes: ["nameEn", "nameVi", "image"],
+                            },
+                        ],
+                    },
+                ],
+                raw: false,
+                nest: true,
+            });
+
+            //convert image
+            if (resDoctor && resDoctor.length > 0) {
+                resDoctor = resDoctor.map((item) => {
+                    if (item.image) {
+                        item.image = Buffer.from(item.image, "base64").toString(
+                            "binary"
+                        );
+                    }
+
+                    return item;
+                });
+            }
+
+            res.errCode = 0;
+            res.data = {
+                resSpecialty,
+                resDoctor,
+                resClinic,
+            };
+            resolve(res); //trả về
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
@@ -271,4 +485,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getAllCode,
+    getDataByName,
+    getDataSearch,
 };

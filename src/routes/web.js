@@ -100,6 +100,10 @@ let initWebRoutes = (app) => {
         clinicControler.handleGetDetailClinicById
     );
 
+    //Viết api search HomePage
+    router.get("/api/search-by-name", userController.handleSearchByName);
+    router.get("/api/search", userController.handleGetDataSearch);
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };
