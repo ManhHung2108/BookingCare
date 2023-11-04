@@ -1,13 +1,31 @@
 import doctorService from "../services/doctorService";
 let handleGetTopDoctorHome = async (req, res) => {
     let limit = req.query.limit;
-
+    console.log(limit);
     if (!limit) {
         limit = 10;
     }
     try {
         let response = await doctorService.getTopDoctorHome(limit);
         // console.log(response);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
+let handleGetTopDoctor = async (req, res) => {
+    let limit = req.query.limit;
+    if (!limit) {
+        limit = 10;
+    }
+
+    try {
+        let response = await doctorService.getTopDoctor(limit);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);
@@ -127,4 +145,5 @@ module.exports = {
     handleGetScheduleDoctorByDate,
     handleGetExtraInforDoctorById,
     handleGetProfileDoctorById,
+    handleGetTopDoctor,
 };

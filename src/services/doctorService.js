@@ -1,5 +1,7 @@
 require("dotenv").config();
 import moment from "moment";
+const Sequelize = require("sequelize");
+const { Op } = Sequelize;
 import _ from "lodash";
 import db from "../models/index";
 
@@ -41,6 +43,85 @@ const getTopDoctorHome = (limit) => {
         }
     });
 };
+
+let getTopDoctor = (limit) => {
+    // Tính ngày 7 ngày trước ngày hiện tại
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let doctors = await db.Booking.findAll({
+                attributes: [
+                    [Sequelize.col("Booking.doctorId"), "doctorId"],
+                    [
+                        Sequelize.fn(
+                            "COUNT",
+                            Sequelize.col("Booking.doctorId")
+                        ),
+                        "appointmentCount",
+                    ],
+                ],
+                include: [
+                    {
+                        model: db.User,
+                        attributes: {
+                            exclude: ["passWord"], //không lấy passWord
+                        },
+                        include: [
+                            {
+                                model: db.Allcode,
+                                as: "positionData",
+                                attributes: ["valueEn", "valueVi"], //lấy ra
+                            },
+                            {
+                                model: db.Doctor_Infor,
+                                attributes: ["specialtyId"],
+                                include: [
+                                    {
+                                        model: db.Specialty,
+                                        as: "specialtyData",
+                                        attributes: ["nameVi", "nameEn"], //lấy ra
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+                where: {
+                    //[Op.gte]: đại diện cho toán tử "greater than or equal" (lớn hơn hoặc bằng) trong các điều kiện truy vấn.
+                    createdAt: {
+                        [Op.gte]: sevenDaysAgo, // Lọc theo ngày tạo trong vòng 7 ngày gần đây
+                    },
+                },
+                group: [
+                    "doctorId",
+                    "User->positionData.id",
+                    "User->Doctor_Infor.id",
+                ],
+                order: [
+                    [Sequelize.fn("COUNT", Sequelize.col("doctorId")), "DESC"],
+                ],
+                limit: parseInt(limit),
+                raw: true,
+                nest: true,
+            });
+
+            resolve({
+                errCode: 0,
+                data: doctors,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+// - Có thể có nhiều cuộc hẹn của cùng một bác sĩ tại cùng một vị trí, và GROUP BY được sử dụng để tổng hợp số lượng cuộc hẹn này
+//lại thành một dòng dữ liệu duy nhất cho mỗi cặp doctorId và positionData.id. Nếu không có GROUP BY, dữ liệu sẽ trả về số cuộc hẹn
+//từng cuộc hẹn riêng lẻ thay vì tổng hợp chúng lại.
+// - Do đó, GROUP BY cần phải sử dụng để xác định các trường bạn muốn tổng hợp dữ liệu theo, trong trường hợp này là doctorId
+//và positionData.id. Điều này giúp bạn trả về kết quả mà bạn mong muốn, tức là số lượng cuộc hẹn cho mỗi bác sĩ tại mỗi vị trí.
 
 let getAllDoctor = () => {
     return new Promise(async (resolve, reject) => {
@@ -530,6 +611,7 @@ module.exports = {
     getScheduleDoctorByDate,
     getExtraInforDoctorById,
     getProfileDoctorById,
+    getTopDoctor,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.
