@@ -4,6 +4,9 @@ const { Op } = require("sequelize");
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
 
+import jwt from "jsonwebtoken";
+const secretKey = "domanhhung"; // Thay thế bằng một khóa bí mật thực sự
+
 let handleUserLogin = (email, passWord) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -38,6 +41,70 @@ let handleUserLogin = (email, passWord) => {
                         // console.log(user); //chú ý để raw: true để trả về obj
                         delete user.passWord; //xóa password đi để tránh trả về password
                         userData.user = user;
+                    } else {
+                        (userData.errCode = 3),
+                            (userData.errMessage = "Mật khẩu không chính xác");
+                    }
+                } else {
+                    userData.errCode = 2;
+                    userData.errMessage = `User của bạn không tồn tại trong hệ thống.`;
+                }
+
+                resolve(userData);
+            } else {
+                userData.errCode = 1;
+                userData.errMessage = `Email của bạn không tồn tại trong hệ thống. Làm ơn thử lại email khác.`;
+                resolve(userData);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+let handleUserLogin2 = (username, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userData = {};
+            let isExist = await checkUserEmail(username);
+            if (isExist) {
+                let user = await db.User.findOne({
+                    attributes: [
+                        "id",
+                        "email",
+                        "passWord",
+                        "roleId",
+                        "firstName",
+                        "lastName",
+                    ],
+                    where: {
+                        email: username,
+                    },
+                    raw: true,
+                });
+
+                console.log(user);
+
+                if (user) {
+                    // compare passWord
+                    let checkPassword = await bcrypt.compareSync(
+                        password,
+                        user.passWord
+                    );
+
+                    if (checkPassword) {
+                        const token = jwt.sign(
+                            {
+                                id: user.id,
+                                username: user.email,
+                                role: user.roleId,
+                            },
+                            secretKey,
+                            { expiresIn: "1h" }
+                        );
+
+                        userData.errCode = 0;
+                        userData.message = "OK";
+                        userData.token = token;
                     } else {
                         (userData.errCode = 3),
                             (userData.errMessage = "Mật khẩu không chính xác");
@@ -487,4 +554,5 @@ module.exports = {
     getAllCode,
     getDataByName,
     getDataSearch,
+    handleUserLogin2,
 };

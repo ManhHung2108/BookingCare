@@ -47,6 +47,25 @@ const handleLogin = async (req, res) => {
     });
 };
 
+const handleLogin2 = async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(500).json({
+            errCode: 1,
+            message: "Tài khoản mật khẩu không được để trống.",
+        });
+    }
+
+    let user = await userService.handleUserLogin2(username, password);
+    res.status(200).json(user);
+    if (!user) {
+        return res
+            .status(401)
+            .json({ message: "Tên người dùng không tồn tại" });
+    }
+};
+
 let handleCreateNewUser = async (req, res) => {
     let data = req.body;
 
@@ -129,4 +148,5 @@ module.exports = {
     handleGetAllCode,
     handleSearchByName,
     handleGetDataSearch,
+    handleLogin2,
 };
