@@ -15,25 +15,9 @@ import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController";
 import specialtyControler from "../controllers/specialtyControler";
 import clinicControler from "../controllers/clinicControler";
+import middlewareControler from "../controllers/middlewareControler";
 
 let router = express.Router();
-
-function authenticateToken(req, res, next) {
-    const token = req.headers.authorization;
-
-    if (!token) {
-        return res.sendStatus(401); // Unauthorized
-    }
-
-    jwt.verify(token, secretKey, (err, user) => {
-        if (err) {
-            return res.sendStatus(403); // Forbidden
-        }
-
-        req.user = user;
-        next();
-    });
-}
 
 let initWebRoutes = (app) => {
     //viết theo chuẩn rest api
@@ -125,7 +109,11 @@ let initWebRoutes = (app) => {
     router.get("/api/search", userController.handleGetDataSearch);
 
     //Viết api xác thực người dùng
-    router.post("/login2", userController.handleLogin2);
+    router.post(
+        "/login2",
+        middlewareControler.authenticateToken,
+        userController.handleLogin2
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

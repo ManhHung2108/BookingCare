@@ -1,11 +1,11 @@
 import e from "express";
-import db from "../models/index";
+require("dotenv").config();
 const { Op } = require("sequelize");
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
+import db from "../models/index";
 
 import jwt from "jsonwebtoken";
-const secretKey = "domanhhung"; // Thay thế bằng một khóa bí mật thực sự
 
 let handleUserLogin = (email, passWord) => {
     return new Promise(async (resolve, reject) => {
@@ -82,8 +82,6 @@ let handleUserLogin2 = (username, password) => {
                     raw: true,
                 });
 
-                console.log(user);
-
                 if (user) {
                     // compare passWord
                     let checkPassword = await bcrypt.compareSync(
@@ -98,7 +96,7 @@ let handleUserLogin2 = (username, password) => {
                                 username: user.email,
                                 role: user.roleId,
                             },
-                            secretKey,
+                            process.env.JWT_ACCESS_KEY,
                             { expiresIn: "1h" }
                         );
 
