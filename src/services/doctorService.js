@@ -47,11 +47,21 @@ let getAllDoctor = () => {
         try {
             let doctors = await db.User.findAll({
                 attributes: {
-                    exclude: ["passWord", "image"], //không lấy passWord
+                    exclude: ["passWord"], //không lấy passWord
                 },
                 where: { roleId: "R2" },
                 raw: true,
             });
+
+            if (doctors && doctors.length > 0) {
+                doctors.map((item) => {
+                    item.image = doctors.image = Buffer.from(
+                        item.image,
+                        "base64"
+                    ).toString("binary");
+                    return item;
+                });
+            }
 
             resolve({
                 errCode: 0,
