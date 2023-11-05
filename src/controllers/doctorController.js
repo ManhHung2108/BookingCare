@@ -136,6 +136,22 @@ const handleGetProfileDoctorById = async (req, res) => {
     }
 };
 
+const handleGetListPatientForDoctor = async (req, res) => {
+    try {
+        let result = await doctorService.getListPatientForDoctor(
+            req.query.doctorId,
+            req.query.date
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetTopDoctorHome,
     handleGetAllDoctor,
@@ -146,4 +162,5 @@ module.exports = {
     handleGetExtraInforDoctorById,
     handleGetProfileDoctorById,
     handleGetTopDoctor,
+    handleGetListPatientForDoctor,
 };

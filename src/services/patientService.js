@@ -55,6 +55,7 @@ const postBookAppointment = (data) => {
                             date: data.date,
                             timeType: data.timeType,
                             token: token,
+                            reason: data.reason,
                         },
                     });
 

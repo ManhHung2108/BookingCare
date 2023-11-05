@@ -156,6 +156,12 @@ let initWebRoutes = (app) => {
         }
     );
 
+    //Viết api quản lý bệnh nhân
+    router.get(
+        "/api/get-list-patient-for-doctor",
+        doctorController.handleGetListPatientForDoctor
+    );
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

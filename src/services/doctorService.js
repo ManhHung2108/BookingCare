@@ -602,6 +602,60 @@ const getProfileDoctorById = (doctorId) => {
     });
 };
 
+const getListPatientForDoctor = (doctorId, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                //Lấy ra các booking đã được confirm
+                let data = await db.Booking.findAll({
+                    where: {
+                        statusId: "S2",
+                        doctorId: doctorId,
+                        date: date,
+                    },
+
+                    include: [
+                        {
+                            model: db.User,
+                            as: "patientData",
+                            attributes: [
+                                "email",
+                                "lastName",
+                                "address",
+                                "birthday",
+                                "gender",
+                            ],
+
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: "genderData",
+                                    attributes: ["valueVi", "valueEn"],
+                                },
+                            ],
+                        },
+                    ],
+
+                    raw: true,
+                    nest: true,
+                });
+
+                resolve({
+                    errCode: 0,
+                    data: data,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -612,6 +666,7 @@ module.exports = {
     getExtraInforDoctorById,
     getProfileDoctorById,
     getTopDoctor,
+    getListPatientForDoctor,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.

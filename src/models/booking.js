@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
             Booking.belongsTo(models.User, {
                 foreignKey: "doctorId",
             });
+
+            Booking.belongsTo(models.User, {
+                foreignKey: "patientId",
+                targetKey: "id",
+                as: "patientData",
+            });
         }
     }
     Booking.init(
@@ -21,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
             patientId: DataTypes.INTEGER,
             date: DataTypes.STRING, //tương tự TIMESTAMP trong SQL
             timeType: DataTypes.STRING,
-            token: DataTypes.STRING, //xác thực booking để xác nhận
+            token: DataTypes.STRING, //xác thực booking để xác nhận,
+            reason: DataTypes.STRING,
         },
         {
             sequelize,
