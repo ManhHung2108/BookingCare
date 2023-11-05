@@ -94,10 +94,12 @@ let handleUserLogin2 = (username, password) => {
                             {
                                 id: user.id,
                                 username: user.email,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
                                 role: user.roleId,
                             },
                             process.env.JWT_ACCESS_KEY,
-                            { expiresIn: "1h" }
+                            { expiresIn: "30d" }
                         );
 
                         userData.errCode = 0;

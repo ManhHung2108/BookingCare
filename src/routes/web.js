@@ -109,10 +109,51 @@ let initWebRoutes = (app) => {
     router.get("/api/search", userController.handleGetDataSearch);
 
     //Viết api xác thực người dùng
-    router.post(
-        "/login2",
+    router.post("/login2", userController.handleLogin2);
+    router.get(
+        "/system-user-infor",
         middlewareControler.authenticateToken,
-        userController.handleLogin2
+        (req, res) => {
+            let userInfor = {
+                id: req.user.id,
+                userName: req.user.username,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+            };
+
+            if (req.user.role === "R1") {
+                userInfor.userType = "admin";
+            }
+            if (req.user.role === "R2") {
+                userInfor.userType = "doctor";
+            }
+
+            res.status(200).json({
+                errCode: 0,
+                message: "User Infor",
+                userInfor,
+            });
+        }
+    );
+    router.get(
+        "/admin-dashboard",
+        middlewareControler.authenticateToken,
+        middlewareControler.authorize(["R1"]),
+        (req, res) => {
+            let userInfor = {
+                id: req.user.id,
+                userName: req.user.username,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+            };
+            // Xử lý khi người dùng là admin
+
+            res.status(200).json({
+                errCode: 0,
+                message: "Admin Dashboard",
+                userInfor,
+            });
+        }
     );
 
     //sử dụng router cho ứng dụng
