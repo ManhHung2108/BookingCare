@@ -639,6 +639,11 @@ const getListPatientForDoctor = (doctorId, date) => {
                                 },
                             ],
                         },
+                        {
+                            model: db.Allcode,
+                            as: "timeTypeDataPatient",
+                            attributes: ["valueVi", "valueEn"],
+                        },
                     ],
 
                     raw: true,
