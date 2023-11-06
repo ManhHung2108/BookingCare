@@ -103,6 +103,8 @@ let initWebRoutes = (app) => {
         "/api/get-detail-clinic-by-id",
         clinicControler.handleGetDetailClinicById
     );
+    router.put("/api/edit-clinic/:id", clinicControler.handleEditClinic);
+    router.delete("/api/delete-clinic/:id", clinicControler.handleDeleteClinic); //restAPI
 
     //Viết api search HomePage
     router.get("/api/search-by-name", userController.handleSearchByName);

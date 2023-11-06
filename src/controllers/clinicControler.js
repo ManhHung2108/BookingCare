@@ -12,6 +12,37 @@ const handleCreateClinic = async (req, res) => {
     }
 };
 
+const handleEditClinic = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let updateData = req.body;
+        let message = await clinicService.updateClinic(id, updateData);
+
+        res.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
+const handleDeleteClinic = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let message = await clinicService.deleteClinic(id);
+
+        res.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 const handleGetAllClinic = async (req, res) => {
     try {
         let result = await clinicService.getAllClinic();
@@ -45,4 +76,6 @@ module.exports = {
     handleCreateClinic,
     handleGetAllClinic,
     handleGetDetailClinicById,
+    handleEditClinic,
+    handleDeleteClinic,
 };

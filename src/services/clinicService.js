@@ -21,7 +21,7 @@ const createClinic = (data) => {
                     nameEn: data.nameEn,
                     address: data.address,
                     provinceId: data.provinceId,
-                    image: data.imageBase64,
+                    image: data.imageBase64 ? data.imageBase64 : null,
                     descriptionHTML: data.descriptionHTML,
                     descriptionMarkdown: data.descriptionMarkdown,
                 });
@@ -31,6 +31,85 @@ const createClinic = (data) => {
                     message: "Thêm phòng khám thành công!",
                 });
             }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const updateClinic = (clinicId, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!clinicId || !data.provinceId) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Yêu cầu nhập đầy đủ thông tin!",
+                });
+            }
+
+            let clinic = await db.Clinic.findOne({
+                where: { id: clinicId },
+            });
+
+            if (clinic) {
+                await db.Clinic.update(
+                    {
+                        nameVi: data.name,
+                        nameEn: data.nameEn,
+                        address: data.address,
+                        provinceId: data.provinceId,
+                        image: data.imageBase64
+                            ? data.imageBase64
+                            : clinic.image,
+                        descriptionHTML: data.descriptionHTML,
+                        descriptionMarkdown: data.descriptionMarkdown,
+                    },
+                    {
+                        where: {
+                            id: clinic.id,
+                        },
+                    }
+                );
+
+                resolve({
+                    errCode: 0,
+                    message: "Cập nhập thành công!",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tồn tại phòng khám!",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const deleteClinic = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let clinicDelete = await db.Clinic.findOne({
+                where: { id: id },
+            });
+
+            if (!clinicDelete) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Không tồn tại người dùng!",
+                });
+            }
+
+            //Nếu tồn tại thực thi xóa
+            if (clinicDelete) {
+                await db.Clinic.destroy({ where: { id: id } }); //kết nối đến db để xóa
+            }
+
+            resolve({
+                errCode: 0,
+                message: "Xóa thành công!",
+            });
         } catch (error) {
             reject(error);
         }
@@ -184,4 +263,6 @@ module.exports = {
     createClinic,
     getAllClinic,
     getDetailClinicById,
+    updateClinic,
+    deleteClinic,
 };
