@@ -152,6 +152,19 @@ const handleGetListPatientForDoctor = async (req, res) => {
     }
 };
 
+const handleSendRemedy = async (req, res) => {
+    try {
+        let result = await doctorService.sendRemedy(req.body);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetTopDoctorHome,
     handleGetAllDoctor,
@@ -163,4 +176,5 @@ module.exports = {
     handleGetProfileDoctorById,
     handleGetTopDoctor,
     handleGetListPatientForDoctor,
+    handleSendRemedy,
 };

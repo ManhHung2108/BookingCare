@@ -161,6 +161,7 @@ let initWebRoutes = (app) => {
         "/api/get-list-patient-for-doctor",
         doctorController.handleGetListPatientForDoctor
     );
+    router.post("/api/send-remedy", doctorController.handleSendRemedy);
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

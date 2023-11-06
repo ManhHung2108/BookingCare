@@ -4,6 +4,7 @@ const Sequelize = require("sequelize");
 const { Op } = Sequelize;
 import _ from "lodash";
 import db from "../models/index";
+import emailService from "../services/emailService";
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
@@ -629,6 +630,7 @@ const getListPatientForDoctor = (doctorId, date) => {
                                 "address",
                                 "birthday",
                                 "gender",
+                                "phoneNumber",
                             ],
 
                             include: [
@@ -661,6 +663,61 @@ const getListPatientForDoctor = (doctorId, date) => {
     });
 };
 
+const sendRemedy = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (
+                !data.email ||
+                !data.doctorId ||
+                !data.patientId ||
+                !data.timeType ||
+                !data.date
+            ) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                //update booking patient status
+                let appointment = await db.Booking.findOne({
+                    where: {
+                        doctorId: data.doctorId,
+                        patientId: data.patientId,
+                        timeType: data.timeType,
+                        date: data.date,
+                        statusId: "S2",
+                    },
+                    raw: false,
+                });
+
+                if (appointment) {
+                    appointment.statusId = "S3";
+                    await appointment.save();
+                }
+
+                //creqate history
+                let history = await db.History.create({
+                    doctorId: data.doctorId,
+                    patientId: data.patientId,
+                    bookingId: data.bookingId ? data.bookingId : null,
+                    description: data.description ? data.description : null,
+                    files: data.image ? data.image : null,
+                });
+
+                //send email
+                await emailService.sendAttachment(data);
+
+                resolve({
+                    errCode: 0,
+                    message: "Gửi hóa đơn khám bệnh thành công.",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -672,6 +729,7 @@ module.exports = {
     getProfileDoctorById,
     getTopDoctor,
     getListPatientForDoctor,
+    sendRemedy,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.

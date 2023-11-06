@@ -14,11 +14,14 @@ module.exports = {
             doctorId: {
                 type: Sequelize.INTEGER,
             },
+            bookingId: {
+                type: Sequelize.INTEGER,
+            },
             description: {
                 type: Sequelize.TEXT,
             },
             files: {
-                type: Sequelize.TEXT,
+                type: Sequelize.BLOB("long"),
             },
             createdAt: {
                 allowNull: false,
