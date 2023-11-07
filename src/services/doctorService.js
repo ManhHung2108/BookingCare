@@ -132,7 +132,26 @@ let getAllDoctor = () => {
                     exclude: ["passWord"], //không lấy passWord
                 },
                 where: { roleId: "R2" },
+                include: [
+                    {
+                        model: db.Allcode,
+                        as: "positionData",
+                        attributes: ["valueEn", "valueVi"], //lấy ra
+                    },
+                    {
+                        model: db.Doctor_Infor,
+                        attributes: ["specialtyId"],
+                        include: [
+                            {
+                                model: db.Specialty,
+                                as: "specialtyData",
+                                attributes: ["nameVi", "nameEn"], //lấy ra
+                            },
+                        ],
+                    },
+                ],
                 raw: true,
+                nest: true,
             });
 
             if (doctors && doctors.length > 0) {
