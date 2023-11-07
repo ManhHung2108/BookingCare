@@ -12,6 +12,38 @@ const handleCreateSpecialty = async (req, res) => {
     }
 };
 
+const handleEditSpecialty = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let updateData = req.body;
+
+        let message = await specialtyService.updateSpecialty(id, updateData);
+
+        res.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
+const handleDeleteSpecialty = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let message = await specialtyService.deleteSpecialty(id);
+
+        res.status(200).json(message);
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 const handleGetAllSpecialty = async (req, res) => {
     try {
         let result = await specialtyService.getAllSpecialty();
@@ -45,4 +77,6 @@ module.exports = {
     handleCreateSpecialty,
     handleGetAllSpecialty,
     handleGetDetailSpecialtyById,
+    handleEditSpecialty,
+    handleDeleteSpecialty,
 };

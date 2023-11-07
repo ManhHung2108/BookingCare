@@ -95,6 +95,14 @@ let initWebRoutes = (app) => {
         "/api/get-detail-specialty-by-id",
         specialtyControler.handleGetDetailSpecialtyById
     );
+    router.put(
+        "/api/edit-specialty/:id",
+        specialtyControler.handleEditSpecialty
+    );
+    router.delete(
+        "/api/delete-specialty/:id",
+        specialtyControler.handleDeleteSpecialty
+    ); //restAPI
 
     //Viết api quản lý phòng khám
     router.post("/api/create-new-clinic", clinicControler.handleCreateClinic);

@@ -33,6 +33,85 @@ const createSpecialty = (data) => {
     });
 };
 
+const updateSpecialty = (specialtyId, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!specialtyId) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Yêu cầu nhập đầy đủ thông tin!",
+                });
+            }
+
+            let specialty = await db.Specialty.findOne({
+                where: { id: specialtyId },
+            });
+
+            if (specialty) {
+                await db.Specialty.update(
+                    {
+                        nameVi: data.name,
+                        nameEn: data.nameEn,
+                        image: data.imageBase64
+                            ? data.imageBase64
+                            : specialty.image,
+                        descriptionHTML: data.descriptionHTML,
+                        descriptionMarkdown: data.descriptionMarkdown,
+                    },
+                    {
+                        where: {
+                            id: specialty.id,
+                        },
+                    }
+                );
+
+                resolve({
+                    errCode: 0,
+                    message: "Cập nhập thành công!",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tồn tại phòng khám!",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const deleteSpecialty = (specialtyId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let specialtyDelete = await db.Specialty.findOne({
+                where: { id: specialtyId },
+            });
+
+            if (!specialtyDelete) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Không tồn tại phòng khám!",
+                });
+            }
+
+            //Nếu tồn tại thực thi xóa
+            if (specialtyDelete) {
+                await db.Specialty.destroy({
+                    where: { id: specialtyDelete.id },
+                });
+            }
+
+            resolve({
+                errCode: 0,
+                message: "Xóa thành công!",
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 const getAllSpecialty = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -43,7 +122,7 @@ const getAllSpecialty = () => {
                 // console.log("check data from getAllSpecialty: ", data);
 
                 //gán lại thuộc tính image type từ Blob -> binary(base64)
-                data.map((item, index) => {
+                data.map((item) => {
                     item.image = data.image = Buffer.from(
                         item.image,
                         "base64"
@@ -125,4 +204,6 @@ module.exports = {
     createSpecialty,
     getAllSpecialty,
     getDetailSpecialtyById,
+    deleteSpecialty,
+    updateSpecialty,
 };
