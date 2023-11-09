@@ -16,6 +16,7 @@ import patientController from "../controllers/patientController";
 import specialtyControler from "../controllers/specialtyControler";
 import clinicControler from "../controllers/clinicControler";
 import middlewareControler from "../controllers/middlewareControler";
+import statisticControler from "../controllers/statisticControler";
 
 let router = express.Router();
 
@@ -172,6 +173,12 @@ let initWebRoutes = (app) => {
         doctorController.handleGetListPatientForDoctor
     );
     router.post("/api/send-remedy", doctorController.handleSendRemedy);
+
+    //Viết api thống kê
+    router.get(
+        `/api/get-booking-count-by-month`,
+        statisticControler.handleGetBookingCountsByMonth
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
