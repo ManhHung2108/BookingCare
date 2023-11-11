@@ -12,6 +12,20 @@ let handleGetBookingCountsByMonth = async (req, res) => {
     }
 };
 
+const handleClinicMonthlyBookingStats = async (req, res) => {
+    try {
+        let result = await statisticService.clinicMonthlyBookingStats();
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleGetBookingCountsByMonth,
+    handleClinicMonthlyBookingStats,
 };

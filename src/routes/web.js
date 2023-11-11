@@ -179,6 +179,10 @@ let initWebRoutes = (app) => {
         `/api/get-booking-count-by-month`,
         statisticControler.handleGetBookingCountsByMonth
     );
+    router.get(
+        `/api/clinics/monthly-booking-stats`,
+        statisticControler.handleClinicMonthlyBookingStats
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);

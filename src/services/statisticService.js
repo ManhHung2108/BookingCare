@@ -47,6 +47,39 @@ const getBookingCountsByMonth = async () => {
     });
 };
 
+const clinicMonthlyBookingStats = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = `
+            SELECT 
+	            DATE_FORMAT(FROM_UNIXTIME (date /  1000), '%Y-%m') AS thang, clinics.nameVi, clinics.nameEn,
+	            COUNT(*) AS quantity
+                FROM bookings
+            inner join doctor_infors on doctor_infors.doctorId = bookings.doctorId
+            inner join clinics on clinics.id = doctor_infors.clinicId
+            WHERE 
+                DATE_FORMAT(FROM_UNIXTIME(date/1000), '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+            GROUP BY thang, clinics.id
+            ORDER BY thang, quantity DESC;
+          `;
+
+            const resultsBooking = await sequelize.query(query, {
+                type: QueryTypes.SELECT,
+            });
+
+            resolve({
+                errCode: 0,
+                message: "OK",
+                data: resultsBooking,
+            });
+        } catch (error) {
+            console.error("Error:", error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getBookingCountsByMonth,
+    clinicMonthlyBookingStats,
 };
