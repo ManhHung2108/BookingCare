@@ -17,12 +17,12 @@ const getTopDoctorHome = (limit) => {
                 },
                 include: [
                     {
-                        model: db.Allcode,
+                        model: db.Position,
                         as: "positionData",
                         attributes: ["valueEn", "valueVi"], //lấy ra
                     },
                     {
-                        model: db.Allcode,
+                        model: db.Gender,
                         as: "genderData",
                         attributes: ["valueEn", "valueVi"], //lấy ra
                     },
@@ -71,7 +71,7 @@ let getTopDoctor = (limit) => {
                         },
                         include: [
                             {
-                                model: db.Allcode,
+                                model: db.Position,
                                 as: "positionData",
                                 attributes: ["valueEn", "valueVi"], //lấy ra
                             },
@@ -134,7 +134,7 @@ let getAllDoctor = () => {
                 where: { roleId: "R2" },
                 include: [
                     {
-                        model: db.Allcode,
+                        model: db.Position,
                         as: "positionData",
                         attributes: ["valueEn", "valueVi"], //lấy ra
                     },
@@ -206,7 +206,6 @@ let checkRequiredFields = (inputData) => {
 };
 
 let saveDetailInforDoctor = (inputData) => {
-    console.log(inputData);
     return new Promise(async (resolve, reject) => {
         try {
             let check = checkRequiredFields(inputData);
@@ -307,7 +306,7 @@ const getDetailDoctorById = (id) => {
                     },
                     include: [
                         {
-                            model: db.Allcode,
+                            model: db.Position,
                             as: "positionData", //chú ý đặt bên model tên mối quan hệ như nào thì phải lấy đúng
                             attributes: ["valueEn", "valueVi"],
                         },
@@ -333,17 +332,17 @@ const getDetailDoctorById = (id) => {
                             ],
                             include: [
                                 {
-                                    model: db.Allcode,
+                                    model: db.Price,
                                     as: "priceData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
                                 {
-                                    model: db.Allcode,
+                                    model: db.Payment,
                                     as: "paymentData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
                                 {
-                                    model: db.Allcode,
+                                    model: db.Province,
                                     as: "provinceData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
@@ -460,7 +459,7 @@ const getScheduleDoctorByDate = (doctorId, date) => {
                     where: { doctorId: doctorId, date: date },
                     include: [
                         {
-                            model: db.Allcode,
+                            model: db.TimeType,
                             as: "timeData",
                             attributes: ["valueEn", "valueVi"],
                         },
@@ -508,17 +507,17 @@ const getExtraInforDoctorById = (doctorId) => {
                     },
                     include: [
                         {
-                            model: db.Allcode,
+                            model: db.Price,
                             as: "priceData",
                             attributes: ["valueEn", "valueVi"],
                         },
                         {
-                            model: db.Allcode,
+                            model: db.Payment,
                             as: "paymentData",
                             attributes: ["valueEn", "valueVi"],
                         },
                         {
-                            model: db.Allcode,
+                            model: db.Province,
                             as: "provinceData",
                             attributes: ["valueEn", "valueVi"],
                         },
@@ -569,7 +568,7 @@ const getProfileDoctorById = (doctorId) => {
                             ],
                         },
                         {
-                            model: db.Allcode,
+                            model: db.Position,
                             as: "positionData",
                             attributes: ["valueEn", "valueVi"],
                         },
@@ -580,17 +579,17 @@ const getProfileDoctorById = (doctorId) => {
                             },
                             include: [
                                 {
-                                    model: db.Allcode,
+                                    model: db.Price,
                                     as: "priceData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
                                 {
-                                    model: db.Allcode,
+                                    model: db.Province,
                                     as: "provinceData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
                                 {
-                                    model: db.Allcode,
+                                    model: db.Payment,
                                     as: "paymentData",
                                     attributes: ["valueEn", "valueVi"],
                                 },
@@ -654,14 +653,14 @@ const getListPatientForDoctor = (doctorId, date) => {
 
                             include: [
                                 {
-                                    model: db.Allcode,
+                                    model: db.Gender,
                                     as: "genderData",
                                     attributes: ["valueVi", "valueEn"],
                                 },
                             ],
                         },
                         {
-                            model: db.Allcode,
+                            model: db.TimeType,
                             as: "timeTypeDataPatient",
                             attributes: ["valueVi", "valueEn"],
                         },

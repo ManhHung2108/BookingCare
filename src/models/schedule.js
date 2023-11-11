@@ -10,9 +10,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Schedule.belongsTo(models.Allcode, {
+
+            Schedule.belongsTo(models.TimeType, {
                 foreignKey: "timeType",
-                targetKey: "keyMap",
+                targetKey: "id",
                 as: "timeData",
             });
 

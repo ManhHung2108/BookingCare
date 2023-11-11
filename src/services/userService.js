@@ -401,7 +401,7 @@ let getDataByName = (query) => {
                     attributes: ["id", "firstName", "lastName", "image"],
                     include: [
                         {
-                            model: db.Allcode,
+                            model: db.Position,
                             as: "positionData",
                             attributes: ["valueEn", "valueVi"],
                         },
@@ -490,7 +490,7 @@ const getDataSearch = () => {
                 attributes: ["id", "firstName", "lastName", "image"],
                 include: [
                     {
-                        model: db.Allcode,
+                        model: db.Position,
                         as: "positionData",
                         attributes: ["valueEn", "valueVi"],
                     },

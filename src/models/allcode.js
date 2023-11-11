@@ -7,43 +7,7 @@ module.exports = (sequelize, DataTypes) => {
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
-        static associate(models) {
-            // define association here
-            Allcode.hasMany(models.User, {
-                foreignKey: "positionId",
-                as: "positionData",
-            });
-
-            Allcode.hasMany(models.User, {
-                foreignKey: "gender",
-                as: "genderData",
-            });
-
-            //1 position có thể có nhiều User
-            //sử dụng hasMany: khóa ngoại positionId, gender được đặt ở bảng Users
-            Allcode.hasMany(models.Schedule, {
-                foreignKey: "timeType",
-                as: "timeData",
-            });
-
-            Allcode.hasMany(models.Doctor_Infor, {
-                foreignKey: "priceId",
-                as: "priceData",
-            });
-            Allcode.hasMany(models.Doctor_Infor, {
-                foreignKey: "priceId",
-                as: "paymentData",
-            });
-            Allcode.hasMany(models.Doctor_Infor, {
-                foreignKey: "provinceId",
-                as: "provinceData",
-            });
-
-            Allcode.hasMany(models.Booking, {
-                foreignKey: "timeType",
-                as: "timeTypeDataPatient",
-            });
-        }
+        static associate(models) {}
     }
     Allcode.init(
         {
