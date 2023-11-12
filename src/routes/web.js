@@ -188,6 +188,9 @@ let initWebRoutes = (app) => {
         statisticControler.handleCountStatsForAdmin
     );
 
+    //api get infor
+    router.get(`/api/get-infor-user`, userController.handleGetInforUser);
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

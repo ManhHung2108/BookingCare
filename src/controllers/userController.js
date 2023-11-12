@@ -66,6 +66,19 @@ const handleLogin2 = async (req, res) => {
     }
 };
 
+const handleGetInforUser = async (req, res) => {
+    const { id } = req.query;
+    try {
+        let result = await userService.getInforUser(id);
+        res.status(200).json(result);
+    } catch (error) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 let handleCreateNewUser = async (req, res) => {
     let data = req.body;
 
@@ -149,4 +162,5 @@ module.exports = {
     handleSearchByName,
     handleGetDataSearch,
     handleLogin2,
+    handleGetInforUser,
 };

@@ -126,6 +126,46 @@ let handleUserLogin2 = (username, password) => {
     });
 };
 
+let getInforUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu",
+                });
+            } else {
+                let user = await db.User.findOne({
+                    where: {
+                        id: id,
+                    },
+                    attributes: [
+                        "id",
+                        "email",
+                        "firstName",
+                        "lastName",
+                        "image",
+                    ],
+                });
+
+                if (user.image) {
+                    user.image = Buffer.from(user.image, "base64").toString(
+                        "binary"
+                    );
+                }
+
+                resolve({
+                    errCode: 0,
+                    message: "OK",
+                    data: user,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 let checkUserEmail = (userEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -555,4 +595,5 @@ module.exports = {
     getDataByName,
     getDataSearch,
     handleUserLogin2,
+    getInforUser,
 };
