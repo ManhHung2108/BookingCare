@@ -1,6 +1,8 @@
 import db from "../models/index";
 require("dotenv").config();
 import { v4 as uuidv4 } from "uuid";
+const Sequelize = require("sequelize");
+
 import emailService from "./emailService";
 
 let buildUrlEmail = (doctorId, token) => {
@@ -135,7 +137,94 @@ const postVerifyBookAppointment = (data) => {
     });
 };
 
+const getBookingHistoryForPatient = (patientId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!patientId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                const currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0); // Thiết lập giờ, phút, giây, và mili giây về 0
+                const currentTimeStamp = currentDate.getTime(); // Lấy thời gian
+
+                let bookings = await db.Booking.findAll({
+                    where: {
+                        patientId: patientId,
+                        statusId: "S2",
+                        date: { [Sequelize.Op.gte]: currentTimeStamp },
+                    },
+                    attributes: ["reason", "date", "id"],
+                    include: [
+                        {
+                            model: db.User,
+                            attributes: ["firstName", "lastName"],
+                        },
+                        {
+                            model: db.User,
+                            as: "patientData",
+                            attributes: ["firstName", "lastName"],
+                        },
+                        {
+                            model: db.TimeType,
+                            as: "timeTypeDataPatient",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
+                });
+
+                let bookingHistory = await db.History.findAll({
+                    where: {
+                        patientId: patientId,
+                    },
+                    include: [
+                        {
+                            model: db.Booking,
+                            as: "bookingData",
+                            attributes: ["reason", "date"],
+                            include: [
+                                {
+                                    model: db.User,
+                                    attributes: ["firstName", "lastName"],
+                                },
+                                {
+                                    model: db.User,
+                                    as: "patientData",
+                                    attributes: ["firstName", "lastName"],
+                                },
+                                {
+                                    model: db.TimeType,
+                                    as: "timeTypeDataPatient",
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                            ],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
+                });
+
+                resolve({
+                    errCode: 0,
+                    message: "OK",
+                    data: {
+                        bookings,
+                        bookingHistory,
+                    },
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     postBookAppointment,
     postVerifyBookAppointment,
+    getBookingHistoryForPatient,
 };

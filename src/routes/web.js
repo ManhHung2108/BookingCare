@@ -191,6 +191,13 @@ let initWebRoutes = (app) => {
     //api get infor
     router.get(`/api/get-infor-user`, userController.handleGetInforUser);
 
+    //Viết api lấy ra lịch khám
+    router.get(
+        `/api/get-booking-history-for-patient`,
+        middlewareControler.authenticateToken,
+        patientController.handleGetBookingHistoryForPatient
+    );
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

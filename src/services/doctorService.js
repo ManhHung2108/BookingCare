@@ -92,7 +92,11 @@ let getTopDoctor = (limit) => {
                 where: {
                     //[Op.gte]: đại diện cho toán tử "greater than or equal" (lớn hơn hoặc bằng) trong các điều kiện truy vấn.
                     createdAt: {
-                        [Op.gte]: sevenDaysAgo, // Lọc theo ngày tạo trong vòng 7 ngày gần đây
+                        // [Op.gte]: sevenDaysAgo, // Lọc theo ngày tạo trong vòng 7 ngày gần đây
+                        [Op.between]: [
+                            new Date().setHours(0, 0, 0, 0),
+                            new Date().setDate(new Date().getDate() + 7),
+                        ],
                     },
                 },
                 group: [
