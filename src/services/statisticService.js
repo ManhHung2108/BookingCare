@@ -1,4 +1,6 @@
+import db from "../models/index";
 import { sequelize } from "../models/index";
+const Sequelize = require("sequelize");
 
 const { QueryTypes } = require("sequelize");
 const getBookingCountsByMonth = async () => {
@@ -79,7 +81,33 @@ const clinicMonthlyBookingStats = () => {
     });
 };
 
+const countStatsForAdmin = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userCountStats = await db.User.count();
+            let doctorCountStats = await db.User.count({
+                where: {
+                    roleId: "R2",
+                },
+            });
+            let clinicCountStats = await db.Clinic.count();
+
+            resolve({
+                errCode: 0,
+                data: {
+                    userCountStats,
+                    doctorCountStats,
+                    clinicCountStats,
+                },
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getBookingCountsByMonth,
     clinicMonthlyBookingStats,
+    countStatsForAdmin,
 };

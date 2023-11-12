@@ -183,6 +183,10 @@ let initWebRoutes = (app) => {
         `/api/clinics/monthly-booking-stats`,
         statisticControler.handleClinicMonthlyBookingStats
     );
+    router.get(
+        `/api/count-stats-for-admin`,
+        statisticControler.handleCountStatsForAdmin
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
