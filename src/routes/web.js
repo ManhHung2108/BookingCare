@@ -166,6 +166,28 @@ let initWebRoutes = (app) => {
             });
         }
     );
+    router.get(
+        "/doctor-dashboard",
+        middlewareControler.authenticateToken,
+        middlewareControler.authorize(["R2"]),
+        (req, res) => {
+            res.status(200).json({
+                errCode: 0,
+                message: "Doctor Dashboard",
+            });
+        }
+    );
+    router.get(
+        "/home-dashboard",
+        middlewareControler.authenticateToken,
+        middlewareControler.authorize(["R1", "R2"]),
+        (req, res) => {
+            res.status(200).json({
+                errCode: 0,
+                message: "Welcome to dashboard home.",
+            });
+        }
+    );
 
     //Viết api quản lý bệnh nhân
     router.get(
