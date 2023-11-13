@@ -46,9 +46,12 @@ const getTopDoctorHome = (limit) => {
 };
 
 let getTopDoctor = (limit) => {
+    // Ngày hôm nay
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     // Tính ngày 7 ngày trước ngày hiện tại
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 30);
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -92,11 +95,8 @@ let getTopDoctor = (limit) => {
                 where: {
                     //[Op.gte]: đại diện cho toán tử "greater than or equal" (lớn hơn hoặc bằng) trong các điều kiện truy vấn.
                     createdAt: {
-                        // [Op.gte]: sevenDaysAgo, // Lọc theo ngày tạo trong vòng 7 ngày gần đây
-                        [Op.between]: [
-                            new Date().setHours(0, 0, 0, 0),
-                            new Date().setDate(new Date().getDate() + 7),
-                        ],
+                        // [Op.gte]: sevenDaysAgo,
+                        [Op.between]: [sevenDaysAgo, today], //Lọc theo ngày tạo trong vòng 7 ngày gần đây
                     },
                 },
                 group: [
@@ -105,7 +105,8 @@ let getTopDoctor = (limit) => {
                     "User->Doctor_Infor.id",
                 ],
                 order: [
-                    [Sequelize.fn("COUNT", Sequelize.col("doctorId")), "DESC"],
+                    // [Sequelize.fn("COUNT", Sequelize.col("doctorId")), "DESC"],
+                    [Sequelize.literal("appointmentCount"), "DESC"], //sắp xếp theo appointmentCount
                 ],
                 limit: parseInt(limit),
                 raw: true,
