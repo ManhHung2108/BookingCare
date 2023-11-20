@@ -219,6 +219,10 @@ let initWebRoutes = (app) => {
         middlewareControler.authenticateToken,
         patientController.handleGetBookingHistoryForPatient
     );
+    router.get(
+        `/api/look-up-booking-history-for-patient`,
+        patientController.handleLookUpBookingHistoryForPatient
+    );
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
