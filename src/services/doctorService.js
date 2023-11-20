@@ -741,6 +741,76 @@ const sendRemedy = (data) => {
     });
 };
 
+const searchDoctorByName = (search) => {
+    if (search) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let doctors = await db.User.findAll({
+                    attributes: {
+                        exclude: ["passWord"], //không lấy passWord
+                    },
+                    where: {
+                        roleId: "R2",
+                        // Tìm kiếm theo firstName và lastName giống chính xác với chuỗi search
+                        [Op.and]: search.split(" ").map((part) => ({
+                            [Op.or]: [
+                                {
+                                    firstName: {
+                                        [Op.like]: `%${part}%`,
+                                    },
+                                },
+                                {
+                                    lastName: {
+                                        [Op.like]: `%${part}%`,
+                                    },
+                                },
+                            ],
+                        })),
+                    },
+                    include: [
+                        {
+                            model: db.Position,
+                            as: "positionData",
+                            attributes: ["valueEn", "valueVi"], //lấy ra
+                        },
+                        {
+                            model: db.Doctor_Infor,
+                            attributes: ["specialtyId"],
+                            include: [
+                                {
+                                    model: db.Specialty,
+                                    as: "specialtyData",
+                                    attributes: ["nameVi", "nameEn"], //lấy ra
+                                },
+                            ],
+                        },
+                    ],
+                    raw: true,
+                    nest: true,
+                });
+
+                if (doctors && doctors.length > 0) {
+                    doctors.map((item) => {
+                        item.image = doctors.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                resolve({
+                    errCode: 0,
+                    data: doctors,
+                });
+            } catch (error) {
+                // console.log(error);
+                reject(error);
+            }
+        });
+    }
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -753,6 +823,7 @@ module.exports = {
     getTopDoctor,
     getListPatientForDoctor,
     sendRemedy,
+    searchDoctorByName,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.

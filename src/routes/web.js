@@ -53,6 +53,10 @@ let initWebRoutes = (app) => {
         doctorController.handleGetDetailDoctorById
     );
     router.get("/api/get-top-doctor", doctorController.handleGetTopDoctor);
+    router.get(
+        `/api/search-doctor-by-name`,
+        doctorController.handleSearchDoctorByName
+    );
 
     //Viết api cho schedule
     router.post(
