@@ -72,10 +72,27 @@ const handleGetDetailClinicById = async (req, res) => {
     }
 };
 
+const handleSearchClinicByName = async (req, res) => {
+    try {
+        let result = await clinicService.searchClinicByName(
+            req.query.search,
+            req.query.lang
+        );
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handleCreateClinic,
     handleGetAllClinic,
     handleGetDetailClinicById,
     handleEditClinic,
     handleDeleteClinic,
+    handleSearchClinicByName,
 };

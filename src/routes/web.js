@@ -95,6 +95,10 @@ let initWebRoutes = (app) => {
         "/api/get-all-specialty",
         specialtyControler.handleGetAllSpecialty
     );
+    router.get(
+        `/api/search-specialty-by-name`,
+        specialtyControler.handleSearchSpecialtyByName
+    );
     //Viết api cho chi tiết chuyên khoa
     router.get(
         "/api/get-detail-specialty-by-id",
@@ -118,6 +122,10 @@ let initWebRoutes = (app) => {
     );
     router.put("/api/edit-clinic/:id", clinicControler.handleEditClinic);
     router.delete("/api/delete-clinic/:id", clinicControler.handleDeleteClinic); //restAPI
+    router.get(
+        `/api/search-clinic-by-name`,
+        clinicControler.handleSearchClinicByName
+    );
 
     //Viết api search HomePage
     router.get("/api/search-by-name", userController.handleSearchByName);

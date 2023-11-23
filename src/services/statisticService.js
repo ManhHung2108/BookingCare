@@ -48,8 +48,6 @@ const getBookingCountsByMonth = async () => {
                 return acc;
             }, []);
 
-            console.log(data);
-
             resolve({
                 errCode: 0,
                 message: "OK",

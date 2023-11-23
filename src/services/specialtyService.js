@@ -1,4 +1,6 @@
 import db from "../models/index";
+const { Op } = require("sequelize");
+
 const createSpecialty = (data) => {
     // console.log("check data from createSpecialty: ", data);
     return new Promise(async (resolve, reject) => {
@@ -200,10 +202,58 @@ const getDetailSpecialtyById = (inputId, location) => {
     });
 };
 
+const searchSpecialtyByName = (search, lang) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (search && lang) {
+                let specialties = [];
+                if (lang === "vi") {
+                    specialties = await db.Specialty.findAll({
+                        attributes: ["nameVi", "nameEn", "image", "id"],
+                        where: {
+                            nameVi: {
+                                [Op.like]: `%${search}%`,
+                            },
+                        },
+                    });
+                } else {
+                    specialties = await db.Specialty.findAll({
+                        attributes: ["nameVi", "nameEn", "image", "id"],
+                        where: {
+                            nameEn: {
+                                [Op.like]: `%${search}%`,
+                            },
+                        },
+                    });
+                }
+
+                if (specialties && specialties.length > 0) {
+                    specialties.map((item) => {
+                        item.image = specialties.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                resolve({
+                    errCode: 0,
+                    data: specialties,
+                });
+            }
+        } catch (error) {
+            // console.log(error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     createSpecialty,
     getAllSpecialty,
     getDetailSpecialtyById,
     deleteSpecialty,
     updateSpecialty,
+    searchSpecialtyByName,
 };

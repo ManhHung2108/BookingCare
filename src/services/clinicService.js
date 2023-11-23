@@ -259,10 +259,57 @@ const getDetailClinicById = (id, location, search) => {
     });
 };
 
+const searchClinicByName = (search, lang) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (search && lang) {
+                let clinics = [];
+                if (lang === "vi") {
+                    clinics = await db.Clinic.findAll({
+                        attributes: ["nameVi", "nameEn", "image", "id"],
+                        where: {
+                            nameVi: {
+                                [Op.like]: `%${search}%`,
+                            },
+                        },
+                    });
+                } else {
+                    clinics = await db.Clinic.findAll({
+                        attributes: ["nameVi", "nameEn", "image", "id"],
+                        where: {
+                            nameEn: {
+                                [Op.like]: `%${search}%`,
+                            },
+                        },
+                    });
+                }
+
+                if (clinics && clinics.length > 0) {
+                    clinics.map((item) => {
+                        item.image = clinics.image = Buffer.from(
+                            item.image,
+                            "base64"
+                        ).toString("binary");
+                        return item;
+                    });
+                }
+
+                resolve({
+                    errCode: 0,
+                    data: clinics,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     createClinic,
     getAllClinic,
     getDetailClinicById,
     updateClinic,
     deleteClinic,
+    searchClinicByName,
 };
