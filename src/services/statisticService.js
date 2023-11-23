@@ -34,13 +34,26 @@ const getBookingCountsByMonth = async () => {
                 type: QueryTypes.SELECT,
             });
 
+            let data = resultsBooking.reduce((acc, booking) => {
+                const matchingCancle = resultsBookingCancle.find(
+                    (element) => element.month === booking.month
+                );
+
+                acc.push({
+                    month: booking.month,
+                    counts: booking.quantity ? booking.quantity : 0,
+                    countsCancle: matchingCancle ? matchingCancle.quantity : 0,
+                });
+
+                return acc;
+            }, []);
+
+            console.log(data);
+
             resolve({
                 errCode: 0,
                 message: "OK",
-                data: {
-                    resultsBooking,
-                    resultsBookingCancle,
-                },
+                data: data,
             });
         } catch (error) {
             console.error("Error:", error);
