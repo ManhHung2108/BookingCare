@@ -236,6 +236,9 @@ let initWebRoutes = (app) => {
         patientController.handleLookUpBookingHistoryForPatient
     );
 
+    //Viết api cập nhập thông tin
+    router.put(`/api/update-profile/:id`, userController.handleUpdateProfile);
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

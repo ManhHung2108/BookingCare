@@ -394,6 +394,7 @@ const bulkCreateSchedule = (data) => {
                     //Thêm thuộc tính để lưu vào csdl
                     schedules = schedules.map((item) => {
                         item.maxNumber = MAX_NUMBER_SCHEDULE;
+                        item.currentNumber = 0;
                         return item;
                     });
                 }

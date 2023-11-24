@@ -145,6 +145,10 @@ let getInforUser = (id) => {
                         "firstName",
                         "lastName",
                         "image",
+                        "gender",
+                        "address",
+                        "birthday",
+                        "phoneNumber",
                     ],
                 });
 
@@ -585,6 +589,54 @@ const getDataSearch = () => {
     });
 };
 
+const updateProfile = (userId, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!userId) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Không tìm thấy người dùng!",
+                });
+            }
+
+            let user = await db.User.findOne({
+                where: { id: userId },
+            });
+
+            if (user) {
+                await db.User.update(
+                    {
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        address: data.address,
+                        phoneNumber: data.phoneNumber,
+                        gender: data.gender,
+                        image: data.avatar ? data.avatar : user.image,
+                        birthday: data.birthDay ? data.birthDay : data.birthDay,
+                    },
+                    {
+                        where: {
+                            id: user.id,
+                        },
+                    }
+                );
+
+                resolve({
+                    errCode: 0,
+                    message: "Cập nhập thành công!",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tồn tại người dùng!",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
@@ -596,4 +648,5 @@ module.exports = {
     getDataSearch,
     handleUserLogin2,
     getInforUser,
+    updateProfile,
 };

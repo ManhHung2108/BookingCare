@@ -152,6 +152,23 @@ const handleGetDataSearch = async (req, res) => {
     }
 };
 
+const handleUpdateProfile = async (req, res) => {
+    try {
+        let id = req.params.id;
+        const data = req.body;
+
+        let result = await userService.updateProfile(id, data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log("Get all code error: ", error);
+        //Khi không kết nối được thì chạy vào đây
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
@@ -163,4 +180,5 @@ module.exports = {
     handleGetDataSearch,
     handleLogin2,
     handleGetInforUser,
+    handleUpdateProfile,
 };
