@@ -258,6 +258,11 @@ const lookUpBookingHistoryForPatient = (tokenBooking) => {
                             as: "statusData",
                             attributes: ["valueEn", "valueVi"],
                         },
+                        {
+                            model: db.History,
+                            as: "bookingData",
+                            attributes: ["description"],
+                        },
                     ],
                     raw: false,
                     nest: true,
