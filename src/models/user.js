@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
                 as: "genderData",
             });
 
+            User.belongsTo(models.Role, {
+                foreignKey: "roleId",
+                targetKey: "id",
+            });
+
             //1 user chỉ chứa 1 position
             //sử dụng belongsTo đầu 1 được đặt ở User khóa ngoại positionId, gender tham chiếu tới keyMap của bảng allcodes
 

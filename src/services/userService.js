@@ -201,6 +201,14 @@ let getAllUser = (userId) => {
                     attributes: {
                         exclude: ["passWord"],
                     },
+                    include: [
+                        {
+                            model: db.Role,
+                            attributes: ["valueVi", "valueEn"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
                 });
             }
 
