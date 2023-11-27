@@ -2,7 +2,12 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     class Status extends Model {
-        static associate(models) {}
+        static associate(models) {
+            Status.hasMany(models.Booking, {
+                foreignKey: "statusId",
+                as: "statusData",
+            });
+        }
     }
     Status.init(
         {
@@ -17,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "Status",
+            freezeTableName: true, // Tên bảng không đặt là số nhiều
         }
     );
     return Status;

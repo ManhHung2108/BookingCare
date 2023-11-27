@@ -69,6 +69,7 @@ const postBookAppointment = (data) => {
                             time: data.timeString,
                             doctorName: data.doctorName,
                             language: data.language,
+                            token: token,
                             redirectLink: buildUrlEmail(data.doctorId, token),
                         });
 
@@ -223,102 +224,52 @@ const getBookingHistoryForPatient = (patientId) => {
     });
 };
 
-const lookUpBookingHistoryForPatient = (email) => {
+const lookUpBookingHistoryForPatient = (tokenBooking) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!email) {
+            if (!tokenBooking) {
                 resolve({
                     errCode: 1,
-                    errMessage: "Yêu cầu nhập email đã đặt lịch!",
+                    errMessage: "Yêu cầu nhập mã đặt lịch được gửi về email!",
                 });
             } else {
-                const currentDate = new Date();
-                currentDate.setHours(0, 0, 0, 0); // Thiết lập giờ, phút, giây, và mili giây về 0
-                const currentTimeStamp = currentDate.getTime(); // Lấy thời gian
-
-                let patient = await db.User.findOne({
+                let booking = await db.Booking.findAll({
                     where: {
-                        email: email,
+                        token: tokenBooking,
                     },
+                    attributes: ["reason", "date", "id", "statusId"],
+                    include: [
+                        {
+                            model: db.User,
+                            attributes: ["firstName", "lastName"],
+                        },
+                        {
+                            model: db.User,
+                            as: "patientData",
+                            attributes: ["firstName", "lastName"],
+                        },
+                        {
+                            model: db.TimeType,
+                            as: "timeTypeDataPatient",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                        {
+                            model: db.Status,
+                            as: "statusData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
                 });
 
-                if (patient) {
-                    let bookings = await db.Booking.findAll({
-                        where: {
-                            patientId: patient.id,
-                            statusId: "S2",
-                            date: { [Sequelize.Op.gte]: currentTimeStamp },
-                        },
-                        attributes: ["reason", "date", "id"],
-                        include: [
-                            {
-                                model: db.User,
-                                attributes: ["firstName", "lastName"],
-                            },
-                            {
-                                model: db.User,
-                                as: "patientData",
-                                attributes: ["firstName", "lastName"],
-                            },
-                            {
-                                model: db.TimeType,
-                                as: "timeTypeDataPatient",
-                                attributes: ["valueEn", "valueVi"],
-                            },
-                        ],
-                        raw: false,
-                        nest: true,
-                    });
-
-                    let bookingHistory = await db.History.findAll({
-                        where: {
-                            patientId: patient.id,
-                        },
-                        include: [
-                            {
-                                model: db.Booking,
-                                as: "bookingData",
-                                attributes: ["reason", "date"],
-                                include: [
-                                    {
-                                        model: db.User,
-                                        attributes: ["firstName", "lastName"],
-                                    },
-                                    {
-                                        model: db.User,
-                                        as: "patientData",
-                                        attributes: ["firstName", "lastName"],
-                                    },
-                                    {
-                                        model: db.TimeType,
-                                        as: "timeTypeDataPatient",
-                                        attributes: ["valueEn", "valueVi"],
-                                    },
-                                ],
-                            },
-                        ],
-                        raw: false,
-                        nest: true,
-                    });
-
-                    resolve({
-                        errCode: 0,
-                        message: "OK",
-                        data: {
-                            bookings,
-                            bookingHistory,
-                        },
-                    });
-                } else {
-                    resolve({
-                        errCode: 2,
-                        errMessage: "Không tìm thấy dữ liệu lịch hẹn!",
-                        data: {
-                            bookings: [],
-                            bookingHistory: [],
-                        },
-                    });
-                }
+                resolve({
+                    errCode: 0,
+                    message: "OK",
+                    data: {
+                        booking,
+                    },
+                });
             }
         } catch (error) {
             reject(error);

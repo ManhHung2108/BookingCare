@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
                 as: "timeTypeDataPatient",
             });
 
+            Booking.belongsTo(models.Status, {
+                foreignKey: "statusId",
+                targetKey: "id",
+                as: "statusData",
+            });
+
             //1-1
             Booking.hasOne(models.History, {
                 foreignKey: "bookingId",
