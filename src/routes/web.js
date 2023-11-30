@@ -235,6 +235,10 @@ let initWebRoutes = (app) => {
         `/api/look-up-booking-history-for-patient`,
         patientController.handleLookUpBookingHistoryForPatient
     );
+    router.put(
+        `/api/cancle-booking/:id`,
+        patientController.handleCancleBooking
+    );
 
     //Viết api cập nhập thông tin
     router.put(`/api/update-profile/:id`, userController.handleUpdateProfile);

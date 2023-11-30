@@ -63,9 +63,25 @@ const handleLookUpBookingHistoryForPatient = async (req, res) => {
     }
 };
 
+const handleCancleBooking = async (req, res) => {
+    try {
+        let id = req.params.id;
+
+        let result = await patientService.cancleBooking(id);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handlePostBookAppointment,
     handlePostVerifyBookAppointment,
     handleGetBookingHistoryForPatient,
     handleLookUpBookingHistoryForPatient,
+    handleCancleBooking,
 };

@@ -282,9 +282,47 @@ const lookUpBookingHistoryForPatient = (tokenBooking) => {
     });
 };
 
+const cancleBooking = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                let appointment = await db.Booking.findOne({
+                    where: {
+                        id: id,
+                    },
+                    raw: false,
+                });
+
+                if (appointment) {
+                    appointment.statusId = "S4";
+                    appointment.save();
+
+                    resolve({
+                        errCode: 0,
+                        message: "Hủy lịch hẹn thành công!",
+                    });
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: "Lịch hẹn không tồn tại!",
+                    });
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     postBookAppointment,
     postVerifyBookAppointment,
     getBookingHistoryForPatient,
     lookUpBookingHistoryForPatient,
+    cancleBooking,
 };
