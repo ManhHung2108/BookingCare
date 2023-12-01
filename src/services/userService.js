@@ -106,20 +106,20 @@ let handleUserLogin2 = (username, password) => {
                         userData.message = "OK";
                         userData.token = token;
                     } else {
-                        (userData.errCode = 3),
-                            (userData.errMessage = "Mật khẩu không chính xác");
+                        userData.errCode = 3;
+                        userData.errMessage =
+                            "Tài khoản, mật khẩu không chính xác.";
                     }
                 } else {
                     userData.errCode = 2;
-                    userData.errMessage = `User của bạn không tồn tại trong hệ thống.`;
+                    userData.errMessage = `Tài khoản, mật khẩu không chính xác.`;
                 }
-
-                resolve(userData);
             } else {
                 userData.errCode = 1;
                 userData.errMessage = `Email của bạn không tồn tại trong hệ thống. Làm ơn thử lại email khác.`;
-                resolve(userData);
             }
+
+            resolve(userData);
         } catch (error) {
             reject(error);
         }
@@ -645,6 +645,58 @@ const updateProfile = (userId, data) => {
     });
 };
 
+const changePassword = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.oldPassword || !data.newPassword) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                let userData = {};
+
+                let user = await db.User.findOne({
+                    where: {
+                        id: data.id,
+                    },
+                    raw: false,
+                });
+
+                if (user) {
+                    let checkOldPassword = await bcrypt.compareSync(
+                        data.oldPassword,
+                        user.passWord
+                    );
+
+                    //Nếu sai mật khẩus
+                    if (checkOldPassword) {
+                        let hashPassWordFromByScript = await hashUserPassWord(
+                            data.newPassword
+                        );
+
+                        user.passWord = hashPassWordFromByScript;
+                        user.save();
+
+                        userData.errCode = 0;
+                        userData.message = "Đổi mật khẩu thành công!";
+                    } else {
+                        userData.errCode = 3;
+                        userData.errMessage = "Mật khẩu không chính xác!";
+                    }
+                } else {
+                    userData.errCode = 1;
+                    userData.errMessage = "Không tìm thấy người dùng!";
+                }
+
+                resolve(userData);
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
@@ -657,4 +709,5 @@ module.exports = {
     handleUserLogin2,
     getInforUser,
     updateProfile,
+    changePassword,
 };

@@ -40,6 +40,7 @@ let initWebRoutes = (app) => {
     router.put("/api/edit-user/:id", userController.handleEditUser);
     router.delete("/api/delete-user/:id", userController.handleDeleteUser); //restAPI
     router.get("/api/allcode", userController.handleGetAllCode);
+    router.post("/api/change-password", userController.handleChangePassword);
 
     //Viết api cho doctor
     router.get("/api/top-doctor-home", doctorController.handleGetTopDoctorHome);

@@ -58,12 +58,8 @@ const handleLogin2 = async (req, res) => {
     }
 
     let user = await userService.handleUserLogin2(username, password);
-    res.status(200).json(user);
-    if (!user) {
-        return res
-            .status(401)
-            .json({ message: "Tên người dùng không tồn tại" });
-    }
+
+    return res.status(200).json(user);
 };
 
 const handleGetInforUser = async (req, res) => {
@@ -169,6 +165,22 @@ const handleUpdateProfile = async (req, res) => {
     }
 };
 
+const handleChangePassword = async (req, res) => {
+    try {
+        const data = req.body;
+
+        let result = await userService.changePassword(data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log("Get all code error: ", error);
+
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
@@ -181,4 +193,5 @@ module.exports = {
     handleLogin2,
     handleGetInforUser,
     handleUpdateProfile,
+    handleChangePassword,
 };
