@@ -697,6 +697,21 @@ const changePassword = (data) => {
     });
 };
 
+const getAllGender = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.Gender.findAll();
+            resolve({
+                errCode: 0,
+                message: "OK",
+                data,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
@@ -710,4 +725,5 @@ module.exports = {
     getInforUser,
     updateProfile,
     changePassword,
+    getAllGender,
 };

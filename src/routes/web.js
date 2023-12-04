@@ -244,6 +244,9 @@ let initWebRoutes = (app) => {
     //Viết api cập nhập thông tin
     router.put(`/api/update-profile/:id`, userController.handleUpdateProfile);
 
+    //Viết api lấy genders
+    router.get(`/api/get-all-gender`, userController.handleGetAllGender);
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };
