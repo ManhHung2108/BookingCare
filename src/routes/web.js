@@ -247,6 +247,9 @@ let initWebRoutes = (app) => {
     //Viết api lấy genders
     router.get(`/api/get-all-gender`, userController.handleGetAllGender);
 
+    //Viết api đăng ký
+    router.post(`/api/register`, userController.handleRegister);
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };

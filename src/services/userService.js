@@ -712,6 +712,60 @@ const getAllGender = () => {
     });
 };
 
+const registerUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (
+                !data ||
+                !data.email ||
+                !data.passWord ||
+                !data.firstName ||
+                !data.lastName ||
+                !data.phoneNumber ||
+                !data.gender
+            ) {
+                resolve({
+                    errCode: 2,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                //check email có tồn tại không
+                let checkEmail = await checkUserEmail(data.email);
+
+                if (checkEmail == true) {
+                    resolve({
+                        errCode: 1,
+                        errMessage: "Email đã tồn tại!",
+                    });
+                } else {
+                    let hashPassWordFromByScript = await hashUserPassWord(
+                        data.passWord
+                    );
+
+                    //map đến table User trong model, tạo mới bằng hàm create
+                    await db.User.create({
+                        email: data.email,
+                        passWord: hashPassWordFromByScript,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        phoneNumber: data.phoneNumber,
+                        gender: data.gender,
+                        birthday: data.birthday,
+                        roleId: "R3",
+                    });
+
+                    resolve({
+                        errCode: 0,
+                        message: "OK",
+                    });
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     handleUserLogin,
     getAllUser,
@@ -726,4 +780,5 @@ module.exports = {
     updateProfile,
     changePassword,
     getAllGender,
+    registerUser,
 };

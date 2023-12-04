@@ -195,6 +195,20 @@ const handleGetAllGender = async (req, res) => {
     }
 };
 
+const handleRegister = async (req, res) => {
+    try {
+        let data = req.body;
+        let result = await userService.registerUser(req.body);
+        return res.status(200).json(result);
+    } catch (e) {
+        console.log("register controller error: ", e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+
 module.exports = {
     handleLogin,
     handleGetAllUser,
@@ -209,4 +223,5 @@ module.exports = {
     handleUpdateProfile,
     handleChangePassword,
     handleGetAllGender,
+    handleRegister,
 };
