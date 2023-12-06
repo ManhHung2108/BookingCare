@@ -105,6 +105,20 @@ const handleGetScheduleDoctorByDate = async (req, res) => {
     }
 };
 
+const handleDeleteSchedule = async (req, res) => {
+    try {
+        const scheduleId = parseInt(req.params.id);
+        let response = await doctorService.deleteSchedule(scheduleId);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 const handleGetExtraInforDoctorById = async (req, res) => {
     // console.log(req.query.doctorId);
     try {
@@ -185,6 +199,7 @@ module.exports = {
     handleGetDetailDoctorById,
     handleBulkCreateSchedule,
     handleGetScheduleDoctorByDate,
+    handleDeleteSchedule,
     handleGetExtraInforDoctorById,
     handleGetProfileDoctorById,
     handleGetTopDoctor,

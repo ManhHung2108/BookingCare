@@ -497,6 +497,44 @@ const getScheduleDoctorByDate = (doctorId, date) => {
     });
 };
 
+const deleteSchedule = (scheduleId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!scheduleId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm tham số yêu cầu!",
+                });
+            } else {
+                let scheduleDelete = db.Schedule.findOne({
+                    where: {
+                        id: scheduleId,
+                    },
+                });
+
+                if (!scheduleDelete) {
+                    resolve({
+                        errCode: 2,
+                        errMessage: "Lịch cần xóa không tồn tại!",
+                    });
+                }
+
+                //Nếu tồn tại thực thi xóa
+                if (scheduleDelete) {
+                    await db.Schedule.destroy({ where: { id: scheduleId } });
+                }
+
+                resolve({
+                    errCode: 0,
+                    message: "Xóa lịch hẹn thành công!",
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+};
+
 const getExtraInforDoctorById = (doctorId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -818,6 +856,7 @@ module.exports = {
     saveDetailInforDoctor,
     getDetailDoctorById,
     bulkCreateSchedule,
+    deleteSchedule,
     getScheduleDoctorByDate,
     getExtraInforDoctorById,
     getProfileDoctorById,
