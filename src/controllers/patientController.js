@@ -78,10 +78,39 @@ const handleCancleBooking = async (req, res) => {
     }
 };
 
+const handleNewReview = async (req, res) => {
+    try {
+        const data = req.body;
+        let result = await patientService.newReview(data);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
+const handleGetDoctorRating = async (req, res) => {
+    try {
+        let result = await patientService.getDoctorRating(req.query.id);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handlePostBookAppointment,
     handlePostVerifyBookAppointment,
     handleGetBookingHistoryForPatient,
     handleLookUpBookingHistoryForPatient,
     handleCancleBooking,
+    handleNewReview,
+    handleGetDoctorRating,
 };

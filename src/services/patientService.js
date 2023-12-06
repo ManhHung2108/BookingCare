@@ -319,10 +319,82 @@ const cancleBooking = (id) => {
     });
 };
 
+const newReview = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.rating || !data.doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Chưa chọn đánh giá!",
+                });
+            } else {
+                let review = await db.Review.create({
+                    rating: data.rating,
+                    doctorId: data.doctorId,
+                    comment: data.comment ? data.comment : "",
+                });
+
+                let history = await db.History.findOne({
+                    where: {
+                        bookingId: data.bookingId,
+                    },
+                    raw: false,
+                });
+
+                if (history) {
+                    history.reviewId = parseInt(review.id);
+                    history.save();
+                }
+
+                resolve({
+                    errCode: 0,
+                    message: "Cảm ơn bạn vì sự phản hồi từ bạn!",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const getDoctorRating = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Không tìm thấy tham số yêu cầu!",
+                });
+            } else {
+                const averageRating = await db.Review.findOne({
+                    attributes: [
+                        [
+                            Sequelize.fn("AVG", Sequelize.col("Review.rating")),
+                            "averageRating",
+                        ],
+                    ],
+                    where: {
+                        doctorId: doctorId,
+                    },
+                });
+
+                resolve({
+                    errCode: 0,
+                    data: averageRating,
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     postBookAppointment,
     postVerifyBookAppointment,
     getBookingHistoryForPatient,
     lookUpBookingHistoryForPatient,
     cancleBooking,
+    newReview,
+    getDoctorRating,
 };

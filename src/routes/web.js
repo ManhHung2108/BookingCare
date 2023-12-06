@@ -250,6 +250,13 @@ let initWebRoutes = (app) => {
     //Viết api đăng ký
     router.post(`/api/register`, userController.handleRegister);
 
+    //Viết api đánh giá
+    router.post(`/api/new-review`, patientController.handleNewReview);
+    router.get(
+        `/api/get-doctor-rating`,
+        patientController.handleGetDoctorRating
+    );
+
     //sử dụng router cho ứng dụng
     return app.use("/", router);
 };
