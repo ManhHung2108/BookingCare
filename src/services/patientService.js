@@ -3,6 +3,9 @@ require("dotenv").config();
 import { v4 as uuidv4 } from "uuid";
 const Sequelize = require("sequelize");
 
+import { sequelize } from "../models/index";
+const { QueryTypes } = require("sequelize");
+
 import emailService from "./emailService";
 
 let buildUrlEmail = (doctorId, token) => {
@@ -389,6 +392,33 @@ const getDoctorRating = (doctorId) => {
     });
 };
 
+const getReviews = (doctorId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let comments = [];
+
+            const query = `
+            select users.firstName, users.lastName, reviews.comment, reviews.rating, histories.createdAt
+            from histories
+            inner join reviews on histories.reviewId = reviews.id
+            inner join users on histories.patientId = users.Id
+            where histories.doctorId = ${doctorId};
+          `;
+
+            comments = await sequelize.query(query, {
+                type: QueryTypes.SELECT,
+            });
+
+            resolve({
+                errCode: 0,
+                data: comments,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     postBookAppointment,
     postVerifyBookAppointment,
@@ -397,4 +427,5 @@ module.exports = {
     cancleBooking,
     newReview,
     getDoctorRating,
+    getReviews,
 };

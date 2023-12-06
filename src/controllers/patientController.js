@@ -105,6 +105,19 @@ const handleGetDoctorRating = async (req, res) => {
     }
 };
 
+const handleGetReviews = async (req, res) => {
+    try {
+        let result = await patientService.getReviews(req.query.id);
+        res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Lỗi từ server...",
+        });
+    }
+};
+
 module.exports = {
     handlePostBookAppointment,
     handlePostVerifyBookAppointment,
@@ -113,4 +126,5 @@ module.exports = {
     handleCancleBooking,
     handleNewReview,
     handleGetDoctorRating,
+    handleGetReviews,
 };

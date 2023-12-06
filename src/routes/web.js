@@ -256,6 +256,7 @@ let initWebRoutes = (app) => {
         `/api/get-doctor-rating`,
         patientController.handleGetDoctorRating
     );
+    router.get(`/api/get-reviews`, patientController.handleGetReviews);
 
     //sử dụng router cho ứng dụng
     return app.use("/", router);
