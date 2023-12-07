@@ -48,8 +48,9 @@ const getTopDoctorHome = (limit) => {
 let getTopDoctor = (limit) => {
     // Ngày hôm nay
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    // Tính ngày 7 ngày trước ngày hiện tại
+    // today.setHours(0, 0, 0, 0);
+
+    // Tính 7 ngày trước ngày hiện tại
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 30);
 

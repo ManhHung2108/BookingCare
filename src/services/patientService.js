@@ -369,7 +369,7 @@ const getDoctorRating = (doctorId) => {
                     errMessage: "Không tìm thấy tham số yêu cầu!",
                 });
             } else {
-                const averageRating = await db.Review.findOne({
+                const res = await db.Review.findOne({
                     attributes: [
                         [
                             Sequelize.fn("AVG", Sequelize.col("Review.rating")),
@@ -383,7 +383,7 @@ const getDoctorRating = (doctorId) => {
 
                 resolve({
                     errCode: 0,
-                    data: averageRating,
+                    data: res.averageRating ? res.averageRating : 0,
                 });
             }
         } catch (error) {
@@ -398,11 +398,11 @@ const getReviews = (doctorId) => {
             let comments = [];
 
             const query = `
-            select users.firstName, users.lastName, reviews.comment, reviews.rating, histories.createdAt
-            from histories
-            inner join reviews on histories.reviewId = reviews.id
-            inner join users on histories.patientId = users.Id
-            where histories.doctorId = ${doctorId};
+            select Users.firstName, Users.lastName, Reviews.comment, Reviews.rating, Histories.createdAt
+            from Histories
+            inner join Reviews on Histories.reviewId = Reviews.id
+            inner join Users on Histories.patientId = Users.Id
+            where Histories.doctorId = ${doctorId};
           `;
 
             comments = await sequelize.query(query, {

@@ -11,7 +11,7 @@ const getBookingCountsByMonth = async () => {
               DATE_FORMAT(FROM_UNIXTIME(date / 1000), '%Y-%m') AS month, 
               COUNT(*) AS quantity
             FROM 
-              bookings
+              Bookings
             GROUP BY 
                 month
             ORDER BY 
@@ -21,7 +21,7 @@ const getBookingCountsByMonth = async () => {
             SELECT 
                 DATE_FORMAT(FROM_UNIXTIME(date / 1000), '%Y-%m') AS month, 
                 COUNT(*) AS quantity
-            FROM bookings
+            FROM Bookings
                 WHERE statusId = 'S4'
             GROUP BY month
             ORDER BY month;
@@ -65,14 +65,14 @@ const clinicMonthlyBookingStats = () => {
         try {
             const query = `
             SELECT 
-	            DATE_FORMAT(FROM_UNIXTIME (date /  1000), '%Y-%m') AS thang, clinics.nameVi, clinics.nameEn,
+	            DATE_FORMAT(FROM_UNIXTIME (date /  1000), '%Y-%m') AS thang, Clinics.nameVi, Clinics.nameEn,
 	            COUNT(*) AS quantity
-                FROM bookings
-            inner join doctor_infors on doctor_infors.doctorId = bookings.doctorId
-            inner join clinics on clinics.id = doctor_infors.clinicId
+                FROM Bookings
+            inner join Doctor_Infors on Doctor_Infors.doctorId = Bookings.doctorId
+            inner join Clinics on Clinics.id = Doctor_Infors.clinicId
             WHERE 
                 DATE_FORMAT(FROM_UNIXTIME(date/1000), '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
-            GROUP BY thang, clinics.id
+            GROUP BY thang, Clinics.id
             ORDER BY thang, quantity DESC;
           `;
 
