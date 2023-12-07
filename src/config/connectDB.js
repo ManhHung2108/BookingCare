@@ -16,6 +16,14 @@ const sequelize = new Sequelize(
         dialect:
             "mysql" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
         logging: false, //ko cho hiện thông báo câu lệnh querry trong sql
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000,
+        },
+        // Increase the timeout value
+        timeout: 60000, // in milliseconds
     }
 );
 
