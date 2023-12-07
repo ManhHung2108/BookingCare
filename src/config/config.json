@@ -17,10 +17,13 @@
         "dialect": "mysql"
     },
     "production": {
-        "username": "root",
-        "password": null,
-        "database": "database_production",
-        "host": "127.0.0.1",
-        "dialect": "mysql"
+        "username": "freedb_manhhung",
+        "password": "xJQfXU3jkNm#s$B",
+        "database": "freedb_healthy_booking",
+        "host": "sql.freedb.tech",
+        "dialect": "mysql",
+        "logging": false,
+        "query": { "raw": true },
+        "timezone": "+07:00"
     }
 }

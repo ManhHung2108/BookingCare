@@ -7,6 +7,18 @@ const sequelize = new Sequelize("bookingcare", "root", "123456", {
     logging: false, //ko cho hiện thông báo câu lệnh querry trong sql
 });
 
+// const sequelize = new Sequelize(
+//     "freedb_healthy_booking",
+//     "freedb_manhhung",
+//     "xJQfXU3jkNm#s$B",
+//     {
+//         host: "sql.freedb.tech",
+//         dialect:
+//             "mysql" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+//         logging: false, //ko cho hiện thông báo câu lệnh querry trong sql
+//     }
+// );
+
 //Test connect
 let connectDB = async () => {
     try {
