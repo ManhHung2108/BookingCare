@@ -136,7 +136,8 @@ const handleSearchByName = async (req, res) => {
 
 const handleGetDataSearch = async (req, res) => {
     try {
-        let data = await userService.getDataSearch();
+        let limit = req.query.limit;
+        let data = await userService.getDataSearch(limit);
         return res.status(200).json(data);
     } catch (error) {
         console.log("Get all code error: ", error);

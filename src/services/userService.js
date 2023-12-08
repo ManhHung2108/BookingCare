@@ -506,12 +506,15 @@ let getDataByName = (query) => {
     });
 };
 
-const getDataSearch = () => {
+const getDataSearch = (dataLimit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let res = {};
             //lấy ra tất cả code thỏa mãn where
-            let resSpecialty = await db.Specialty.findAll();
+            let resSpecialty = await db.Specialty.findAll({
+                limit: parseInt(dataLimit),
+            });
+
             //convert image
             if (resSpecialty && resSpecialty.length > 0) {
                 resSpecialty.map((item) => {
@@ -523,7 +526,9 @@ const getDataSearch = () => {
                 });
             }
 
-            let resClinic = await db.Clinic.findAll();
+            let resClinic = await db.Clinic.findAll({
+                limit: parseInt(dataLimit),
+            });
             //convert image
             if (resClinic && resClinic.length > 0) {
                 resClinic.map((item) => {
@@ -567,6 +572,7 @@ const getDataSearch = () => {
                         ],
                     },
                 ],
+                limit: parseInt(dataLimit),
                 raw: false,
                 nest: true,
             });
