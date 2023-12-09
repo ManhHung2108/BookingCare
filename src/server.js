@@ -1,4 +1,5 @@
-import express from "express";
+// import express from "express";
+const express = require("express");
 import bodyParser from "body-parser"; //hỗ trợ lấy tham số client gửi lên vd: /user?id=7
 // import configViewEngine from "./config/viewEngine";
 const configViewEngine = require("./config/viewEngine");
