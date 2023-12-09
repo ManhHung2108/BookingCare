@@ -1,4 +1,5 @@
-import userService from "../services/userService";
+// import userService from "../services/userService";
+const userService = require("../services/userService");
 
 const handleGetAllUser = async (req, res) => {
     let id = req.query.id; //All, id

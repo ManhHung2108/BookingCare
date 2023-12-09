@@ -1,4 +1,6 @@
-import statisticService from "../services/statisticService";
+// import statisticService from "../services/statisticService";
+const statisticService = require("../services/statisticService");
+
 let handleGetBookingCountsByMonth = async (req, res) => {
     try {
         let result = await statisticService.getBookingCountsByMonth();

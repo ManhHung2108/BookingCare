@@ -1,12 +1,18 @@
 require("dotenv").config();
-import moment from "moment";
+// import moment from "moment";
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
-import { sequelize } from "../models/index";
+// import { sequelize } from "../models/index";
+const { sequelize } = require("../models/index");
 const { QueryTypes } = require("sequelize");
-import _ from "lodash";
-import db from "../models/index";
-import emailService from "../services/emailService";
+// import _ from "lodash";
+// import db from "../models/index";
+// import emailService from "../services/emailService";
+
+const moment = require("moment");
+const _ = require("lodash");
+const db = require("../models/index");
+const emailService = require("../services/emailService");
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 

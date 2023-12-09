@@ -1,4 +1,5 @@
-import db from "../models/index";
+// import db from "../models/index";
+const db = require("../models/index");
 const { Op } = require("sequelize");
 
 const createSpecialty = (data) => {

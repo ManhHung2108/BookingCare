@@ -1,4 +1,5 @@
-import db from "../models/index";
+// import db from "../models/index";
+const db = require("../models/index");
 // import bcrypt from "bcryptjs";
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass

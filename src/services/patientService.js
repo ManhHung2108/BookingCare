@@ -1,12 +1,16 @@
-import db from "../models/index";
+// import db from "../models/index";
+const db = require("../models/index");
 require("dotenv").config();
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
+const uuidv4 = require("uuid").v4;
 const Sequelize = require("sequelize");
 
-import { sequelize } from "../models/index";
+// import { sequelize } from "../models/index";
+const { sequelize } = require("../models/index");
 const { QueryTypes } = require("sequelize");
 
-import emailService from "./emailService";
+// import emailService from "./emailService";
+const emailService = require("./emailService");
 
 let buildUrlEmail = (doctorId, token) => {
     let result = `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${doctorId}`;

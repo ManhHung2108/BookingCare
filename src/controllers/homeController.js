@@ -1,5 +1,8 @@
-import db from "../models/index";
-import CRUDService from "../services/CRUDService";
+// import db from "../models/index";
+// import CRUDService from "../services/CRUDService";
+
+const db = require("../models/index");
+const CRUDService = require("../services/CRUDService");
 
 const getHomePage = async (req, res) => {
     try {

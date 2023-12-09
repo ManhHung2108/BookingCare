@@ -1,6 +1,24 @@
 const express = require("express");
 
-import {
+// import {
+//     getHomePage,
+//     getAboutPage,
+//     getCRUD,
+//     postCrud,
+//     displayCRUD,
+//     getEditCRUD,
+//     putCRUD,
+//     deleteCRUD,
+// } from "../controllers/homeController";
+// import userController from "../controllers/userController";
+// import doctorController from "../controllers/doctorController";
+// import patientController from "../controllers/patientController";
+// import specialtyControler from "../controllers/specialtyControler";
+// import clinicControler from "../controllers/clinicControler";
+// import middlewareControler from "../controllers/middlewareControler";
+// import statisticControler from "../controllers/statisticControler";
+
+const {
     getHomePage,
     getAboutPage,
     getCRUD,
@@ -9,14 +27,14 @@ import {
     getEditCRUD,
     putCRUD,
     deleteCRUD,
-} from "../controllers/homeController";
-import userController from "../controllers/userController";
-import doctorController from "../controllers/doctorController";
-import patientController from "../controllers/patientController";
-import specialtyControler from "../controllers/specialtyControler";
-import clinicControler from "../controllers/clinicControler";
-import middlewareControler from "../controllers/middlewareControler";
-import statisticControler from "../controllers/statisticControler";
+} = require("../controllers/homeController");
+const userController = require("../controllers/userController");
+const doctorController = require("../controllers/doctorController");
+const patientController = require("../controllers/patientController");
+const specialtyControler = require("../controllers/specialtyControler");
+const clinicControler = require("../controllers/clinicControler");
+const middlewareControler = require("../controllers/middlewareControler");
+const statisticControler = require("../controllers/statisticControler");
 
 let router = express.Router();
 

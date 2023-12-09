@@ -3,7 +3,8 @@ require("dotenv").config();
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
-import db from "../models/index";
+// import db from "../models/index";
+const db = require("../models/index");
 const jwt = require("jsonwebtoken");
 // import jwt from "jsonwebtoken";
 

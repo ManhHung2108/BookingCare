@@ -1,4 +1,5 @@
-import specialtyService from "../services/specialtyService";
+// import specialtyService from "../services/specialtyService";
+const specialtyService = require("../services/specialtyService");
 const handleCreateSpecialty = async (req, res) => {
     try {
         let result = await specialtyService.createSpecialty(req.body);

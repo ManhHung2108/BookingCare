@@ -1,5 +1,7 @@
-import db from "../models/index";
-import { sequelize } from "../models/index";
+// import db from "../models/index";
+const db = require("../models/index");
+// import { sequelize } from "../models/index";
+const { sequelize } = require("../models/index");
 const Sequelize = require("sequelize");
 
 const { QueryTypes } = require("sequelize");

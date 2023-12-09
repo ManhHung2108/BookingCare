@@ -1,4 +1,5 @@
-import patientService from "../services/patientService";
+// import patientService from "../services/patientService";
+const patientService = require("../services/patientService");
 
 let handlePostBookAppointment = async (req, res) => {
     try {
