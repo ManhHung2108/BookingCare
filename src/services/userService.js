@@ -1,11 +1,11 @@
-import e from "express";
+// import e from "express";
 require("dotenv").config();
 const { Op } = require("sequelize");
-import bcrypt from "bcryptjs";
+const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
 import db from "../models/index";
-
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
+// import jwt from "jsonwebtoken";
 
 let handleUserLogin = (email, passWord) => {
     return new Promise(async (resolve, reject) => {

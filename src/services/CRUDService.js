@@ -1,5 +1,6 @@
 import db from "../models/index";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs";
+const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10); //thuật toán sử dụng để hashPass
 
 let createNewUser = async (data) => {

@@ -1,5 +1,6 @@
 require("dotenv").config();
-import nodemailer from "nodemailer";
+// import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
 let sendSimpleEmail = async (dataSend) => {
     const transporter = nodemailer.createTransport({
