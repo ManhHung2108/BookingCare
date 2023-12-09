@@ -2,6 +2,8 @@ require("dotenv").config();
 import moment from "moment";
 const Sequelize = require("sequelize");
 const { Op } = Sequelize;
+import { sequelize } from "../models/index";
+const { QueryTypes } = require("sequelize");
 import _ from "lodash";
 import db from "../models/index";
 import emailService from "../services/emailService";
@@ -851,6 +853,34 @@ const searchDoctorByName = (search) => {
     }
 };
 
+const getDoctorByClinic = (clinicId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = `
+            select  
+                Users.id, Users.firstName, Users.lastName, Specialties.nameVi, Specialties.nameEn   
+            from Users, Doctor_Infors 
+            inner join Specialties on Doctor_Infors.clinicId = Specialties.id 
+            where Users.id = Doctor_Infors.doctorId 
+                and Doctor_Infors.clinicId = ${clinicId}; 
+          `;
+
+            const result = await sequelize.query(query, {
+                type: QueryTypes.SELECT,
+            });
+
+            resolve({
+                errCode: 0,
+                message: "OK",
+                data: result,
+            });
+        } catch (error) {
+            console.error("Error:", error);
+            reject(error);
+        }
+    });
+};
+
 module.exports = {
     getTopDoctorHome,
     getAllDoctor,
@@ -865,6 +895,7 @@ module.exports = {
     getListPatientForDoctor,
     sendRemedy,
     searchDoctorByName,
+    getDoctorByClinic,
 };
 //- Sequelize sẽ trả về kết quả truy vấn dưới dạng các đối tượng JavaScript thuần túy (plain JavaScript objects) thay vì các
 //đối tượng Sequelize.

@@ -76,6 +76,10 @@ let initWebRoutes = (app) => {
         `/api/delete-schedule/:id`,
         doctorController.handleDeleteSchedule
     );
+    router.get(
+        `/api/get-doctor-by-clinic`,
+        doctorController.handleGetDoctorByClinic
+    );
 
     //Viết api đặt lịch
     router.get(
