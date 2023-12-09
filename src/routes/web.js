@@ -137,9 +137,9 @@ let initWebRoutes = (app) => {
     router.get("/api/search", userController.handleGetDataSearch);
 
     //Viết api xác thực người dùng
-    router.post("/login2", userController.handleLogin2);
+    router.post("/api/login2", userController.handleLogin2);
     router.get(
-        "/system-user-infor",
+        "/api/system-user-infor",
         middlewareControler.authenticateToken,
         (req, res) => {
             let userInfor = {
@@ -164,7 +164,7 @@ let initWebRoutes = (app) => {
         }
     );
     router.get(
-        "/admin-dashboard",
+        "/api/admin-dashboard",
         middlewareControler.authenticateToken,
         middlewareControler.authorize(["R1"]),
         (req, res) => {
@@ -184,7 +184,7 @@ let initWebRoutes = (app) => {
         }
     );
     router.get(
-        "/doctor-dashboard",
+        "/api/doctor-dashboard",
         middlewareControler.authenticateToken,
         middlewareControler.authorize(["R2"]),
         (req, res) => {
@@ -195,7 +195,7 @@ let initWebRoutes = (app) => {
         }
     );
     router.get(
-        "/home-dashboard",
+        "/api/home-dashboard",
         middlewareControler.authenticateToken,
         middlewareControler.authorize(["R1", "R2"]),
         (req, res) => {
