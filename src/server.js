@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser"; //hỗ trợ lấy tham số client gửi lên vd: /user?id=7
-import configViewEngine from "./config/viewEngine";
+// import configViewEngine from "./config/viewEngine";
+const configViewEngine = require("./config/viewEngine");
 import initWebRoutes from "./routes/web";
 import connectDB from "./config/connectDB";
 import cors from "cors";
