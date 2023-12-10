@@ -471,7 +471,11 @@ const getScheduleDoctorByDate = (doctorId, date) => {
                 });
             } else {
                 let data = await db.Schedule.findAll({
-                    where: { doctorId: doctorId, date: date },
+                    where: {
+                        doctorId: doctorId,
+                        date: date,
+                        currentNumber: { [Op.lt]: MAX_NUMBER_SCHEDULE },
+                    },
                     include: [
                         {
                             model: db.TimeType,

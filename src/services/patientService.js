@@ -80,6 +80,20 @@ const postBookAppointment = (data) => {
                             redirectLink: buildUrlEmail(data.doctorId, token),
                         });
 
+                        let schedule = await db.Schedule.findOne({
+                            where: {
+                                date: data.date,
+                                timeType: data.timeType,
+                                doctorId: data.doctorId,
+                            },
+                            raw: false,
+                        });
+
+                        if (schedule) {
+                            schedule.currentNumber = schedule.currentNumber + 1;
+                            schedule.save();
+                        }
+
                         resolve({
                             errCode: 0,
                             message: "Đặt lịch hẹn thành công!",
