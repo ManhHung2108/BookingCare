@@ -37,6 +37,9 @@ let getBodyHTMLEmail = (dataSend) => {
            <b>Doctor: ${dataSend.doctorName}</b>
         </div>
         <div>
+            <b>Adrress Clinic: ${dataSend.addressClinic}</b>
+        </div>
+        <div>
             <p>Appointment code: ${dataSend.token}</p>
         </div>
         <p>Please click on the link below to confirm and complete your appointment.</p>
@@ -59,6 +62,9 @@ let getBodyHTMLEmail = (dataSend) => {
         </div>
         <div>
            <b>Bác sĩ: ${dataSend.doctorName}</b>
+        </div>
+        <div>
+            <b>Địa chỉ cơ sở y tế: ${dataSend.addressClinic}</b>
         </div>
         <div>
             <p>Mã lịch hẹn: ${dataSend.token}</p>

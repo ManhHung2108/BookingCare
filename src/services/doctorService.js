@@ -486,6 +486,12 @@ const getScheduleDoctorByDate = (doctorId, date) => {
                             model: db.User,
                             as: "doctorData",
                             attributes: ["firstName", "lastName"],
+                            include: [
+                                {
+                                    model: db.Doctor_Infor,
+                                    attributes: ["addressClinic"],
+                                },
+                            ],
                         },
                     ],
                     raw: false,

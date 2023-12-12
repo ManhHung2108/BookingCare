@@ -78,6 +78,7 @@ const postBookAppointment = (data) => {
                             language: data.language,
                             token: token,
                             redirectLink: buildUrlEmail(data.doctorId, token),
+                            addressClinic: data.addressClinic,
                         });
 
                         let schedule = await db.Schedule.findOne({
@@ -183,6 +184,12 @@ const getBookingHistoryForPatient = (patientId) => {
                         {
                             model: db.User,
                             attributes: ["firstName", "lastName"],
+                            include: [
+                                {
+                                    model: db.Doctor_Infor,
+                                    attributes: ["addressClinic"],
+                                },
+                            ],
                         },
                         {
                             model: db.User,
@@ -212,6 +219,12 @@ const getBookingHistoryForPatient = (patientId) => {
                                 {
                                     model: db.User,
                                     attributes: ["firstName", "lastName"],
+                                    include: [
+                                        {
+                                            model: db.Doctor_Infor,
+                                            attributes: ["addressClinic"],
+                                        },
+                                    ],
                                 },
                                 {
                                     model: db.User,
